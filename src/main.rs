@@ -1,19 +1,24 @@
 use topcoat::{
     Result,
-    router::{module_router, page},
+    router::{Router, page},
     view::{View, component, view},
 };
 
+static TITLE: &str = "chen.tao's website";
+
 #[tokio::main]
 async fn main() {
-    topcoat::start(module_router!().build()).await.unwrap();
+    topcoat::start(Router::builder().page(home).page(about).build())
+        .await
+        .unwrap();
 }
 
-#[page]
+#[page("/")]
 async fn home() -> Result<impl View> {
     Ok(view! {
         <!DOCTYPE html>
         <html>
+            <title>(TITLE)</title>
             <body>
                 hello(name: "陈涛")
             </body>
@@ -24,4 +29,17 @@ async fn home() -> Result<impl View> {
 #[component]
 async fn hello(name: &str) -> Result<impl View> {
     Ok(view! {<h1>"I'm " (name) "!"</h1>})
+}
+
+#[page("/about")]
+async fn about() -> Result<impl View> {
+    Ok(view! {
+        <!DOCTYPE html>
+        <html>
+            <title>(TITLE)</title>
+            <body>
+                "About"
+            </body>
+        </html>
+    })
 }
