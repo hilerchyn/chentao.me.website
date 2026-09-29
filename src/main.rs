@@ -21,6 +21,10 @@ async fn home() -> Result<impl View> {
             <title>(TITLE)</title>
             <body>
                 hello(name: "陈涛")
+                <ul>
+                    <li><a href="/">"home"</a></li>
+                    <li><a href="/about">"about"</a></li>
+                </ul>
             </body>
         </html>
     })
@@ -38,6 +42,11 @@ async fn about() -> Result<impl View> {
         <html>
             <title>(TITLE)</title>
             <body>
+                hello(name: "陈涛")
+                <ul>
+                    <li><a href="/">"home"</a></li>
+                    <li><a href="/about">"about"</a></li>
+                </ul>
                 "About"
             </body>
         </html>
