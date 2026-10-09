@@ -1,9 +1,12 @@
+use std::path::{Path, PathBuf};
+
 use topcoat::{
     Result,
     asset::{AssetBundle, RouterBuilderAssetExt},
     router::{Router, RouterBuilderDiscoverExt, Slot, layout, module_router, page},
     view::{View, component, view},
 };
+use topcoat_asset::{Bundler, BundlerConfig};
 
 mod about;
 
@@ -12,8 +15,31 @@ static TITLE: &str = "chen.tao's website";
 pub fn router() -> Router {
     module_router!()
         .discover()
-        .assets(AssetBundle::load().unwrap())
+        .assets(asset_bundle())
         .build()
+}
+
+/// `cargo build` compiles asset declarations into the executable and does not
+/// write the `assets` directory `AssetBundle` serves. Bundle that executable
+/// before the router looks the files up.
+fn asset_bundle() -> AssetBundle {
+    let exe = std::env::current_exe().expect("current executable");
+    let dir = exe
+        .parent()
+        .expect("executable directory")
+        .join("assets");
+    let bytes = std::fs::read(&exe).expect("read current executable");
+    let cache_dir = target_dir(&exe).join("topcoat/cache/assets");
+    Bundler::new(&BundlerConfig::new().cache_dir(cache_dir))
+        .bundle(&bytes, &dir)
+        .expect("bundle assets");
+    AssetBundle::load_dir(dir).expect("load asset bundle")
+}
+
+/// `target/<profile>/website` -> `target`, including a target-triple directory.
+fn target_dir(exe: &Path) -> PathBuf {
+    let profile_dir = exe.parent().expect("executable directory");
+    profile_dir.parent().unwrap_or(profile_dir).to_path_buf()
 }
 
 #[component]
