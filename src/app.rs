@@ -1,6 +1,6 @@
 use topcoat::{
     Result,
-    asset::{Asset, AssetBundle, RouterBuilderAssetExt, asset},
+    asset::{AssetBundle, RouterBuilderAssetExt},
     router::{Router, RouterBuilderDiscoverExt, Slot, layout, module_router, page},
     view::{View, component, view},
 };
@@ -8,7 +8,6 @@ use topcoat::{
 mod about;
 
 static TITLE: &str = "chen.tao's website";
-const FERRIS: Asset = asset!("statics/style.css");
 
 pub fn router() -> Router {
     module_router!()
@@ -19,25 +18,52 @@ pub fn router() -> Router {
 
 #[component]
 async fn hello(name: &str) -> Result<impl View> {
-    Ok(view! {<h1>"I'm " (name) "!"</h1>})
+    Ok(view! {
+        <h1 class="text-3xl font-semibold tracking-tight text-stone-950">
+            "I'm " (name) "!"
+        </h1>
+    })
 }
 
 #[layout]
 async fn root_layout(slot: Slot<'_>) -> Result<impl View> {
     Ok(view! {
         <!DOCTYPE html>
-        <html>
+        <html class="h-full">
             <head>
                 <title>(TITLE)</title>
-                <link rel="stylesheet" href=(FERRIS)>
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href=(topcoat::tailwind::stylesheet!())>
             </head>
-            <body>
-                hello(name: "陈涛")
-                <ul>
-                    <li><a href="/">"home"</a></li>
-                    <li><a href="/about">"about"</a></li>
-                </ul>
-                (slot)
+            <body class="min-h-full bg-stone-50 text-stone-900 antialiased">
+                <div class="mx-auto flex min-h-full max-w-2xl flex-col px-6 py-16">
+                    <header class="border-b border-stone-200 pb-8">
+                        hello(name: "陈涛(chen.tao)")
+                        <nav class="mt-6">
+                            <ul class="flex gap-6 text-sm font-medium">
+                                <li>
+                                    <a
+                                        class="text-stone-600 underline-offset-4 hover:text-stone-950 hover:underline"
+                                        href="/"
+                                    >
+                                        "home"
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        class="text-stone-600 underline-offset-4 hover:text-stone-950 hover:underline"
+                                        href="/about"
+                                    >
+                                        "about"
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </header>
+                    <main class="py-10 text-lg leading-8 text-stone-700">
+                        (slot)
+                    </main>
+                </div>
             </body>
         </html>
     })
@@ -46,6 +72,6 @@ async fn root_layout(slot: Slot<'_>) -> Result<impl View> {
 #[page]
 async fn home() -> Result<impl View> {
     Ok(view! {
-        "home"
+        <p>"home"</p>
     })
 }

@@ -6,5 +6,7 @@ use topcoat::{
 
 #[page]
 async fn about() -> Result<impl View> {
-    Ok(view! { "About" })
+    Ok(view! {
+        <p>"About"</p>
+    })
 }
