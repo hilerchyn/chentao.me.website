@@ -13,10 +13,7 @@ mod about;
 static TITLE: &str = "chen.tao's website";
 
 pub fn router() -> Router {
-    module_router!()
-        .discover()
-        .assets(asset_bundle())
-        .build()
+    module_router!().discover().assets(asset_bundle()).build()
 }
 
 /// `cargo build` compiles asset declarations into the executable and does not
@@ -24,10 +21,7 @@ pub fn router() -> Router {
 /// before the router looks the files up.
 fn asset_bundle() -> AssetBundle {
     let exe = std::env::current_exe().expect("current executable");
-    let dir = exe
-        .parent()
-        .expect("executable directory")
-        .join("assets");
+    let dir = exe.parent().expect("executable directory").join("assets");
     let bytes = std::fs::read(&exe).expect("read current executable");
     let cache_dir = target_dir(&exe).join("topcoat/cache/assets");
     Bundler::new(&BundlerConfig::new().cache_dir(cache_dir))
@@ -69,8 +63,9 @@ async fn root_layout(slot: Slot<'_>) -> Result<impl View> {
                             <ul class="flex gap-6 text-sm font-medium">
                                 <li>
                                     <a
-                                        class="text-stone-600 underline-offset-4 hover:text-stone-950 hover:underline"
+                                        class="text-stone-600 underline-offset-4 hover:text-stone-950 hover:underline rounded-full"
                                         href="/"
+                                        id="home"
                                     >
                                         "home"
                                     </a>
@@ -79,6 +74,7 @@ async fn root_layout(slot: Slot<'_>) -> Result<impl View> {
                                     <a
                                         class="text-stone-600 underline-offset-4 hover:text-stone-950 hover:underline"
                                         href="/about"
+                                        id="about"
                                     >
                                         "about"
                                     </a>
@@ -98,6 +94,7 @@ async fn root_layout(slot: Slot<'_>) -> Result<impl View> {
 #[page]
 async fn home() -> Result<impl View> {
     Ok(view! {
+        <script>"const element = document.getElementById('home');element.classList.add('border-b');"</script>
         <p>"home"</p>
     })
 }
