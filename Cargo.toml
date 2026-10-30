@@ -1,12 +1,18 @@
 [package]
 name = "website"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+publish = false
 
 [dependencies]
-tokio = { version = "1.53.1", features = ["macros", "rt-multi-thread"] }
-topcoat = { version = "0.10.0", features = ["tailwind"] }
-topcoat-asset = { version = "0.10.0", features = ["bundler"] }
+askama = { version = "0.16", default-features = false, features = ["std", "derive"] }
+axum = { version = "0.8.9" }
+mime_guess = "2.0.5"
+rust-embed = { version = "8.13.0", features = ["axum", "mime_guess"] }
+tokio = { version = "1.0", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
-[build-dependencies]
-topcoat = { version = "0.10.0", default-features = false, features = ["tailwind"] }
+[dev-dependencies]
+http-body-util = "0.1.0"
+tower = { version = "0.5.2", features = ["util"] }

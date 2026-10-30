@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html class="h-full">
+    <head>
+        <title>chen.tao's website</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/tailwind.css">
+    </head>
+    <body class="min-h-full bg-stone-50 text-stone-900 antialiased">
+        <div class="mx-auto flex min-h-full max-w-2xl flex-col px-6 py-16">
+            <header class="border-b border-stone-200 pb-8">
+                <h1 class="text-3xl font-semibold tracking-tight text-stone-950">I'm 陈涛(chen.tao)!</h1>
+                <nav class="mt-6">
+                    <ul class="flex gap-6 text-sm font-medium">
+                        <li>
+                            <a class="text-stone-600 underline-offset-4 hover:text-stone-950 hover:underline rounded-full" href="/" id="home">home</a>
+                        </li>
+                        <li>
+                            <a class="text-stone-600 underline-offset-4 hover:text-stone-950 hover:underline" href="/about" id="about">about</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <main class="py-10 text-lg leading-8 text-stone-700">
+                <script>
+                    const element = document.getElementById('about');
+                    element.classList.add('border-b');
+                </script>
+                <p>About</p>
+            </main>
+        </div>
+    </body>
+</html>
+
