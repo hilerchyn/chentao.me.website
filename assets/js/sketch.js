@@ -11,10 +11,17 @@
       : stored || (systemDark ? "dark" : "light");
   root.setAttribute("data-theme", initial);
 
+  const i18n = {
+    themeDark: root.dataset.i18nThemeDark || "切换到深色",
+    themeLight: root.dataset.i18nThemeLight || "切换到浅色",
+    menuOpen: root.dataset.i18nMenuOpen || "打开菜单",
+    menuClose: root.dataset.i18nMenuClose || "关闭菜单",
+  };
+
   const themeBtns = document.querySelectorAll("[data-theme-toggle]");
   const syncThemeLabel = () => {
     const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    const label = next === "dark" ? "切换到深色" : "切换到浅色";
+    const label = next === "dark" ? i18n.themeDark : i18n.themeLight;
     themeBtns.forEach((btn) => btn.setAttribute("aria-label", label));
   };
   syncThemeLabel();
@@ -32,7 +39,7 @@
   const panel = document.querySelector("[data-nav-panel]");
   const setMenu = (open) => {
     toggle?.setAttribute("aria-expanded", String(open));
-    toggle?.setAttribute("aria-label", open ? "关闭菜单" : "打开菜单");
+    toggle?.setAttribute("aria-label", open ? i18n.menuClose : i18n.menuOpen);
     panel?.classList.toggle("is-open", open);
     document.body.style.overflow = open ? "hidden" : "";
   };

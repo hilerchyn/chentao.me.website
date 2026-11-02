@@ -1,3 +1,5 @@
+mod i18n;
+
 use askama::Template;
 use axum::{
     extract,
@@ -8,6 +10,7 @@ use axum::{
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+use i18n::{Lang, Page, T};
 use rust_embed::RustEmbed;
 
 // 1. Define your asset folder to embed
@@ -61,22 +64,24 @@ fn app() -> Router {
     Router::new()
         .route("/greet/{name}", get(greet))
         .route("/static/{*file}", get(static_handler))
-        .route("/about", get(handler_about))
-        .route("/", get(handler_home))
+        .route("/", get(|| async { handler_home(Lang::Zh) }))
+        .route("/en", get(|| async { handler_home(Lang::En) }))
+        .route("/about", get(|| async { handler_about(Lang::Zh) }))
+        .route("/en/about", get(|| async { handler_about(Lang::En) }))
 }
 
-async fn handler_home() -> impl IntoResponse {
-    let template = HomeTemplate {
-        nav_name: String::from("home"),
-    };
-    HtmlTemplate(template)
+fn handler_home(lang: Lang) -> impl IntoResponse {
+    HtmlTemplate(HomeTemplate {
+        nav_name: "home",
+        t: T::new(lang, Page::Home),
+    })
 }
 
-async fn handler_about() -> impl IntoResponse {
-    let template = AboutTemplate {
-        nav_name: String::from("about"),
-    };
-    HtmlTemplate(template)
+fn handler_about(lang: Lang) -> impl IntoResponse {
+    HtmlTemplate(AboutTemplate {
+        nav_name: "about",
+        t: T::new(lang, Page::About),
+    })
 }
 
 async fn greet(extract::Path(name): extract::Path<String>) -> impl IntoResponse {
@@ -93,13 +98,15 @@ struct HelloTemplate {
 #[derive(Template)]
 #[template(path = "home.html")]
 struct HomeTemplate {
-    nav_name: String,
+    nav_name: &'static str,
+    t: T,
 }
 
 #[derive(Template)]
 #[template(path = "about.html")]
 struct AboutTemplate {
-    nav_name: String,
+    nav_name: &'static str,
+    t: T,
 }
 
 struct HtmlTemplate<T>(T);
@@ -157,8 +164,44 @@ mod tests {
 
         assert!(html.contains("把想法"));
         assert!(html.contains("打开 GitHub"));
+        assert!(html.contains("lang=\"zh-CN\""));
+        assert!(html.contains("href=\"/en\""));
         assert!(html.contains("/static/css/sketch.css"));
         assert!(html.contains("/static/img/hero-desk.jpg"));
+    }
+
+    #[tokio::test]
+    async fn test_home_page_en() {
+        let response = app()
+            .oneshot(Request::get("/en").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(response.status(), StatusCode::OK);
+        let body = response.into_body();
+        let bytes = body.collect().await.unwrap().to_bytes();
+        let html = String::from_utf8(bytes.to_vec()).unwrap();
+
+        assert!(html.contains("Sketch the idea"));
+        assert!(html.contains("Open GitHub"));
+        assert!(html.contains("lang=\"en\""));
+        assert!(html.contains("href=\"/\""));
+        assert!(html.contains("hreflang=\"zh-CN\""));
+    }
+
+    #[tokio::test]
+    async fn test_about_page_en() {
+        let response = app()
+            .oneshot(Request::get("/en/about").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(response.status(), StatusCode::OK);
+        let body = response.into_body();
+        let bytes = body.collect().await.unwrap().to_bytes();
+        let html = String::from_utf8(bytes.to_vec()).unwrap();
+
+        assert!(html.contains("About"));
+        assert!(html.contains("lang=\"en\""));
+        assert!(html.contains("/en/about") || html.contains("href=\"/about\""));
     }
 
     #[tokio::test]

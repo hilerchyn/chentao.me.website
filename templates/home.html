@@ -1,33 +1,34 @@
 <!doctype html>
-<html lang="zh-CN" data-theme="light">
+<html
+  lang="{{ t.html_lang }}"
+  data-theme="light"
+  data-i18n-theme-dark="{{ t.theme_to_dark }}"
+  data-i18n-theme-light="{{ t.theme_to_light }}"
+  data-i18n-menu-open="{{ t.menu_open }}"
+  data-i18n-menu-close="{{ t.menu_close }}"
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>陈涛 · 把想法画进代码里</title>
-    <meta
-      name="description"
-      content="陈涛的个人站点。写 Rust 与 Go，整理设计模式，把做过的路留给后来者。"
-    />
+    <title>{{ t.page_title }}</title>
+    <meta name="description" content="{{ t.meta_description }}" />
     <meta name="author" content="陈涛 / chen.tao" />
-    <meta property="og:title" content="陈涛 · 把想法画进代码里" />
-    <meta
-      property="og:description"
-      content="写 Rust 与 Go，整理设计模式，把做过的路留给后来者。"
-    />
+    <meta property="og:title" content="{{ t.og_title }}" />
+    <meta property="og:description" content="{{ t.og_description }}" />
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#f4efe4" />
+    <link rel="alternate" hreflang="zh-CN" href="{{ t.alt_zh_href }}" />
+    <link rel="alternate" hreflang="en" href="{{ t.alt_en_href }}" />
+    <link rel="alternate" hreflang="x-default" href="/" />
     <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml" />
-    <link
-      rel="stylesheet"
-      href="/static/css/style.css"
-    />
+    <link rel="stylesheet" href="/static/css/style.css" />
     <link rel="stylesheet" href="/static/css/sketch.css" />
   </head>
   <body data-page="{{ nav_name }}">
-    <a class="skip-link" href="#main">跳到正文</a>
+    <a class="skip-link" href="#main">{{ t.skip_to_content }}</a>
 
-    <nav class="site-nav" aria-label="主导航">
-      <a class="brand" href="/">
+    <nav class="site-nav" aria-label="{{ t.nav_label }}">
+      <a class="brand" href="{{ t.home_href }}">
         <img
           class="brand-mark"
           src="/static/img/mark-nib.jpg"
@@ -39,10 +40,10 @@
       </a>
       <ul class="nav-links">
         <li>
-          <a class="title-4" href="/" aria-current="page">首页</a>
+          <a class="title-4" href="{{ t.home_href }}" {% if nav_name == "home" %}aria-current="page"{% endif %}>{{ t.nav_home }}</a>
         </li>
         <li>
-          <a class="title-4" href="/about">关于</a>
+          <a class="title-4" href="{{ t.about_href }}" {% if nav_name == "about" %}aria-current="page"{% endif %}>{{ t.nav_about }}</a>
         </li>
         <li>
           <a
@@ -60,9 +61,9 @@
           data-nav-toggle
           aria-expanded="false"
           aria-controls="mobile-panel"
-          aria-label="打开菜单"
+          aria-label="{{ t.menu_open }}"
         >
-          <span class="nav-toggle-label">菜单</span>
+          <span class="nav-toggle-label">{{ t.nav_menu }}</span>
           <svg class="icon-open" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
             <path
               d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"
@@ -74,11 +75,18 @@
             />
           </svg>
         </button>
+        <a
+          class="lang-switch"
+          href="{{ t.switch_href }}"
+          hreflang="{{ t.switch_hreflang }}"
+          lang="{{ t.switch_hreflang }}"
+          >{{ t.switch_label }}</a
+        >
         <button
           class="icon-btn"
           type="button"
           data-theme-toggle
-          aria-label="切换到深色"
+          aria-label="{{ t.theme_to_dark }}"
         >
           <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
             <path
@@ -90,24 +98,25 @@
     </nav>
 
     <div class="mobile-panel" id="mobile-panel" data-nav-panel>
-      <a href="/">首页</a>
-      <a href="/about">关于</a>
+      <a href="{{ t.home_href }}">{{ t.nav_home }}</a>
+      <a href="{{ t.about_href }}">{{ t.nav_about }}</a>
       <a href="https://github.com/hilerchyn" rel="noopener noreferrer">GitHub</a>
-      <button type="button" class="panel-theme" data-theme-toggle>切换外观</button>
+      <a href="{{ t.switch_href }}" hreflang="{{ t.switch_hreflang }}" lang="{{ t.switch_hreflang }}">{{ t.switch_label }}</a>
+      <button type="button" class="panel-theme" data-theme-toggle>{{ t.theme_toggle }}</button>
     </div>
 
     <main id="main">
       <section class="hero">
         <div class="wrap hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow caption-3">CHEN.TAO · 笔记录</p>
+            <p class="eyebrow caption-3">{{ t.eyebrow }}</p>
             <h1 class="heading-1 hero-title">
-              把想法<br />
-              画进代码里
+              {{ t.hero_title_1 }}<br />
+              {{ t.hero_title_2 }}
             </h1>
             <p class="body-3 hero-sub">
-              陈涛的个人站点。写 Rust 与 Go，整理设计模式。<br />
-              把做过的路留给后来者。
+              {{ t.hero_sub_1 }}<br />
+              {{ t.hero_sub_2 }}
             </p>
             <div class="hero-actions">
               <a
@@ -115,7 +124,7 @@
                 href="https://github.com/hilerchyn"
                 rel="noopener noreferrer"
               >
-                打开 GitHub
+                {{ t.cta_github }}
                 <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
                   <path
                     d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"
@@ -123,9 +132,7 @@
                 </svg>
               </a>
             </div>
-            <p class="body-6 hero-proof">
-              开源《Rust 设计模式与最佳实践》 · GitHub @hilerchyn
-            </p>
+            <p class="body-6 hero-proof">{{ t.hero_proof }}</p>
           </div>
           <div class="hero-visual">
             <figure class="taped">
@@ -134,7 +141,7 @@
                 src="/static/img/hero-desk.jpg"
                 width="1280"
                 height="720"
-                alt="钢笔速写：书桌上摊开的笔记、钢笔、咖啡杯和笔记本电脑"
+                alt="{{ t.hero_alt }}"
               />
               <span class="tape tape-br" aria-hidden="true"></span>
             </figure>
@@ -142,14 +149,14 @@
           </div>
         </div>
         <div class="wrap">
-          <div class="proof-strip" aria-label="关注方向">
+          <div class="proof-strip" aria-label="{{ t.proof_label }}">
             <span class="proof-item body-5">
               <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
                 <path
                   d="M208,24H72A32,32,0,0,0,40,56V224a8,8,0,0,0,8,8H192a8,8,0,0,0,0-16H56a16,16,0,0,1,16-16H208a8,8,0,0,0,8-8V32A8,8,0,0,0,208,24Zm-8,160H72a31.78,31.78,0,0,0-16,4.29V56A16,16,0,0,1,72,40H200Z"
                 />
               </svg>
-              Rust 设计模式
+              {{ t.proof_rust }}
             </span>
             <span class="proof-item body-5">
               <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
@@ -157,7 +164,7 @@
                   d="M240,128a8,8,0,0,1-8,8H204.94l-37.78,75.58A8,8,0,0,1,160,216h-.4a8,8,0,0,1-7.08-5.14L95.3,72.93,61.66,139.51A8,8,0,0,1,54.59,144H24a8,8,0,0,1,0-16H50.85L88.12,53.51A8,8,0,0,1,102.92,56.8l57.63,137.71L197.41,128H232A8,8,0,0,1,240,128Z"
                 />
               </svg>
-              Go 工程笔记
+              {{ t.proof_go }}
             </span>
             <span class="proof-item body-5">
               <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
@@ -165,40 +172,34 @@
                   d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm36-88a36,36,0,1,1-36-36A36,36,0,0,1,164,128Z"
                 />
               </svg>
-              图结构与翻译
+              {{ t.proof_graph }}
             </span>
           </div>
         </div>
       </section>
 
-      <section class="tagline wrap reveal" aria-label="核心句子">
+      <section class="tagline wrap reveal" aria-label="{{ t.tagline_label }}">
         <p class="heading-2">
-          <span class="tagline-word">先把问题画清楚</span>
-          <span class="tagline-word">再把答案写进仓库</span>
+          <span class="tagline-word">{{ t.tagline_1 }}</span>
+          <span class="tagline-word">{{ t.tagline_2 }}</span>
         </p>
       </section>
 
       <section class="section">
         <div class="wrap problem-grid">
           <div class="reveal">
-            <p class="section-kicker caption-3">问题</p>
-            <h2 class="heading-3">过程常被藏在提交里</h2>
-            <p class="body-3 section-lead">
-              模式、翻译、图结构，做过一遍就散落在不同仓库。后来的自己也要重新翻一遍历史。
-            </p>
+            <p class="section-kicker caption-3">{{ t.problem_kicker }}</p>
+            <h2 class="heading-3">{{ t.problem_title }}</h2>
+            <p class="body-3 section-lead">{{ t.problem_lead }}</p>
           </div>
           <div>
             <article class="problem-card reveal">
-              <h3 class="heading-6">摊开路径</h3>
-              <p class="body-3">
-                把设计模式写成可读的笔记，把 DAG、Web、翻译稿放在同一条线上，方便对照。
-              </p>
+              <h3 class="heading-6">{{ t.problem_card1_title }}</h3>
+              <p class="body-3">{{ t.problem_card1_body }}</p>
             </article>
             <article class="problem-card reveal">
-              <h3 class="heading-6">公开可查</h3>
-              <p class="body-3">
-                不设账号墙。打开 GitHub 就能读源码、提问题、顺着提交往回看。
-              </p>
+              <h3 class="heading-6">{{ t.problem_card2_title }}</h3>
+              <p class="body-3">{{ t.problem_card2_body }}</p>
             </article>
           </div>
         </div>
@@ -206,21 +207,19 @@
 
       <section class="section">
         <div class="wrap">
-          <p class="section-kicker caption-3">你会带走什么</p>
-          <h2 class="heading-3">三件可以立刻用上的东西</h2>
+          <p class="section-kicker caption-3">{{ t.benefit_kicker }}</p>
+          <h2 class="heading-3">{{ t.benefit_title }}</h2>
           <div class="benefit-grid">
             <article class="benefit reveal">
               <img
                 src="/static/img/benefit-notes.jpg"
                 width="800"
                 height="800"
-                alt="钢笔速写：摊开的技术笔记，页面上是代码痕迹与流程图"
+                alt="{{ t.benefit1_alt }}"
               />
               <div class="benefit-body">
-                <h3 class="heading-6">可对照的笔记</h3>
-                <p class="body-6">
-                  《Rust 设计模式与最佳实践》开源在仓库里，模式旁边就是实现。
-                </p>
+                <h3 class="heading-6">{{ t.benefit1_title }}</h3>
+                <p class="body-6">{{ t.benefit1_body }}</p>
               </div>
             </article>
             <article class="benefit reveal">
@@ -228,13 +227,11 @@
                 src="/static/img/benefit-compass.jpg"
                 width="800"
                 height="800"
-                alt="钢笔速写：指南针压在折叠的地形图上"
+                alt="{{ t.benefit2_alt }}"
               />
               <div class="benefit-body">
-                <h3 class="heading-6">从原文到中文</h3>
-                <p class="body-6">
-                  Go 官网《编写网页应用程序》的中文翻译，按原文结构走，方便对照阅读。
-                </p>
+                <h3 class="heading-6">{{ t.benefit2_title }}</h3>
+                <p class="body-6">{{ t.benefit2_body }}</p>
               </div>
             </article>
             <article class="benefit reveal">
@@ -242,13 +239,11 @@
                 src="/static/img/benefit-graph.jpg"
                 width="800"
                 height="800"
-                alt="钢笔速写：有向无环图，节点与箭头画在笔记纸上"
+                alt="{{ t.benefit3_alt }}"
               />
               <div class="benefit-body">
-                <h3 class="heading-6">图结构的实现</h3>
-                <p class="body-6">
-                  有向无环图的 Go 实现。看节点怎么连，比只看定义要清楚。
-                </p>
+                <h3 class="heading-6">{{ t.benefit3_title }}</h3>
+                <p class="body-6">{{ t.benefit3_body }}</p>
               </div>
             </article>
           </div>
@@ -257,23 +252,23 @@
 
       <section class="section">
         <div class="wrap">
-          <p class="section-kicker caption-3">怎么用这个站点</p>
-          <h2 class="heading-3">三步，不用注册</h2>
+          <p class="section-kicker caption-3">{{ t.how_kicker }}</p>
+          <h2 class="heading-3">{{ t.how_title }}</h2>
           <div class="steps">
             <article class="step reveal">
               <div class="step-num title-2">1</div>
-              <h3 class="heading-6">先读一页笔记</h3>
-              <p class="body-6">从首页或仓库 README 进入，看问题是怎么被写下来的。</p>
+              <h3 class="heading-6">{{ t.step1_title }}</h3>
+              <p class="body-6">{{ t.step1_body }}</p>
             </article>
             <article class="step reveal">
               <div class="step-num title-2">2</div>
-              <h3 class="heading-6">再打开对应仓库</h3>
-              <p class="body-6">笔记里提到的模式、图、翻译，都有可以克隆的源码。</p>
+              <h3 class="heading-6">{{ t.step2_title }}</h3>
+              <p class="body-6">{{ t.step2_body }}</p>
             </article>
             <article class="step reveal">
               <div class="step-num title-2">3</div>
-              <h3 class="heading-6">有问题就去提问</h3>
-              <p class="body-6">在 GitHub 提 Issue。全部公开，不用留下邮箱。</p>
+              <h3 class="heading-6">{{ t.step3_title }}</h3>
+              <p class="body-6">{{ t.step3_body }}</p>
             </article>
           </div>
         </div>
@@ -281,8 +276,8 @@
 
       <section class="section">
         <div class="wrap">
-          <p class="section-kicker caption-3">公开的工作</p>
-          <h2 class="heading-3">可以直接打开的仓库</h2>
+          <p class="section-kicker caption-3">{{ t.work_kicker }}</p>
+          <h2 class="heading-3">{{ t.work_title }}</h2>
           <div class="work-grid">
             <a
               class="work-card reveal"
@@ -290,10 +285,8 @@
               rel="noopener noreferrer"
             >
               <div>
-                <h3 class="heading-5">Rust 设计模式与最佳实践</h3>
-                <p class="body-3">
-                  把常见模式写成可读的笔记，源码与说明放在同一个仓库。
-                </p>
+                <h3 class="heading-5">{{ t.work1_title }}</h3>
+                <p class="body-3">{{ t.work1_body }}</p>
               </div>
               <p class="work-meta caption-4">github.com/hilerchyn · Rust</p>
             </a>
@@ -304,8 +297,8 @@
                 rel="noopener noreferrer"
               >
                 <div>
-                  <h3 class="heading-6">DAG</h3>
-                  <p class="body-6">有向无环图的 Go 实现。</p>
+                  <h3 class="heading-6">{{ t.work2_title }}</h3>
+                  <p class="body-6">{{ t.work2_body }}</p>
                 </div>
                 <p class="work-meta caption-4">Go</p>
               </a>
@@ -315,10 +308,10 @@
                 rel="noopener noreferrer"
               >
                 <div>
-                  <h3 class="heading-6">编写网页应用程序</h3>
-                  <p class="body-6">Go 官网原文的中文翻译。</p>
+                  <h3 class="heading-6">{{ t.work3_title }}</h3>
+                  <p class="body-6">{{ t.work3_body }}</p>
                 </div>
-                <p class="work-meta caption-4">Go · 翻译</p>
+                <p class="work-meta caption-4">{{ t.work_meta_translate }}</p>
               </a>
             </div>
           </div>
@@ -327,51 +320,45 @@
 
       <section class="section">
         <div class="wrap">
-          <p class="section-kicker caption-3">常见问题</p>
-          <h2 class="heading-3">先回答这几句</h2>
+          <p class="section-kicker caption-3">{{ t.faq_kicker }}</p>
+          <h2 class="heading-3">{{ t.faq_title }}</h2>
           <div class="faq-list">
             <details class="faq-item reveal">
               <summary class="title-2">
-                这是谁的站点？
+                {{ t.faq1_q }}
                 <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
                   <path
                     d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"
                   />
                 </svg>
               </summary>
-              <p class="faq-a body-3">
-                陈涛，GitHub 用户名 hilerchyn。写 Rust 与 Go，也做技术翻译。
-              </p>
+              <p class="faq-a body-3">{{ t.faq1_a }}</p>
             </details>
             <details class="faq-item reveal">
               <summary class="title-2">
-                能在这里找到什么？
+                {{ t.faq2_q }}
                 <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
                   <path
                     d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"
                   />
                 </svg>
               </summary>
-              <p class="faq-a body-3">
-                开源仓库入口、设计模式笔记、图结构实现，以及 Go 网页应用原文的中文翻译。
-              </p>
+              <p class="faq-a body-3">{{ t.faq2_a }}</p>
             </details>
             <details class="faq-item reveal">
               <summary class="title-2">
-                代码需要付费吗？
+                {{ t.faq3_q }}
                 <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
                   <path
                     d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"
                   />
                 </svg>
               </summary>
-              <p class="faq-a body-3">
-                不需要。仓库公开，随时克隆，随时离开，也不用留下信用卡。
-              </p>
+              <p class="faq-a body-3">{{ t.faq3_a }}</p>
             </details>
             <details class="faq-item reveal">
               <summary class="title-2">
-                如何联系？
+                {{ t.faq4_q }}
                 <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
                   <path
                     d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"
@@ -379,36 +366,32 @@
                 </svg>
               </summary>
               <p class="faq-a body-3">
-                到
+                {{ t.faq4_a_before }}
                 <a href="https://github.com/hilerchyn" rel="noopener noreferrer">GitHub @hilerchyn</a>
-                提 Issue，或看仓库里的讨论。
+                {{ t.faq4_a_after }}
               </p>
             </details>
             <details class="faq-item reveal">
               <summary class="title-2">
-                这个站点用什么搭建？
+                {{ t.faq5_q }}
                 <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
                   <path
                     d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"
                   />
                 </svg>
               </summary>
-              <p class="faq-a body-3">
-                Rust、Axum、Askama。静态资源打包进二进制，页面是服务端渲染的模板。
-              </p>
+              <p class="faq-a body-3">{{ t.faq5_a }}</p>
             </details>
             <details class="faq-item reveal">
               <summary class="title-2">
-                为什么是手绘风格？
+                {{ t.faq6_q }}
                 <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
                   <path
                     d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"
                   />
                 </svg>
               </summary>
-              <p class="faq-a body-3">
-                设计模式和图结构本来就像草稿。用手绘把思考过程留在纸面上，再写进代码。
-              </p>
+              <p class="faq-a body-3">{{ t.faq6_a }}</p>
             </details>
           </div>
         </div>
@@ -417,24 +400,22 @@
       <section class="final-cta">
         <div class="wrap">
           <div class="final-frame reveal">
-            <h2 class="heading-3">把仓库打开，从一页笔记开始</h2>
-            <p class="body-3 hero-sub">
-              源码公开，提问公开。不用注册，也不用留下邮箱。
-            </p>
+            <h2 class="heading-3">{{ t.final_title }}</h2>
+            <p class="body-3 hero-sub">{{ t.final_sub }}</p>
             <div class="hero-actions">
               <a
                 class="btn btn-ink button-md"
                 href="https://github.com/hilerchyn"
                 rel="noopener noreferrer"
               >
-                打开 GitHub
+                {{ t.cta_github }}
                 <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
                   <path
                     d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"
                   />
                 </svg>
               </a>
-              <a class="btn btn-ghost button-md" href="/about">看关于页</a>
+              <a class="btn btn-ghost button-md" href="{{ t.about_href }}">{{ t.cta_about }}</a>
             </div>
           </div>
         </div>
@@ -443,15 +424,16 @@
 
     <footer class="site-footer">
       <div class="wrap footer-row">
-        <p class="caption-4">陈涛 / chen.tao · 画过的，才写得清楚</p>
+        <p class="caption-4">{{ t.footer_line }}</p>
         <div class="footer-links">
-          <a class="caption-4" href="/about">关于</a>
+          <a class="caption-4" href="{{ t.about_href }}">{{ t.nav_about }}</a>
           <a
             class="caption-4"
             href="https://github.com/hilerchyn"
             rel="noopener noreferrer"
             >GitHub</a
           >
+          <a class="caption-4" href="{{ t.switch_href }}" hreflang="{{ t.switch_hreflang }}" lang="{{ t.switch_hreflang }}">{{ t.switch_label }}</a>
         </div>
       </div>
     </footer>

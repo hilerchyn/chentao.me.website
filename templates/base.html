@@ -1,9 +1,12 @@
 <!doctype html>
-<html lang="en" data-bs-theme="auto">
+<html lang="{{ t.html_lang }}" data-bs-theme="auto">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="chen.tao's website" />
+    <meta name="description" content="{{ t.meta_description }}" />
+    <link rel="alternate" hreflang="zh-CN" href="{{ t.alt_zh_href }}" />
+    <link rel="alternate" hreflang="en" href="{{ t.alt_en_href }}" />
+    <link rel="alternate" hreflang="x-default" href="/" />
     <meta
       name="author"
       content="chen.tao"
@@ -187,7 +190,7 @@
     </div>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">陈涛(chen.tao)</a>
+        <a class="navbar-brand" href="{{ t.home_href }}">陈涛(chen.tao)</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -202,10 +205,13 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
             <li class="nav-item">
-              <a class="nav-link {%if nav_name == "home" %} active {%endif%}" aria-current="page" href="/">Home</a>
+              <a class="nav-link {%if nav_name == "home" %} active {%endif%}" href="{{ t.home_href }}">{{ t.nav_home }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {%if nav_name == "about" %} active {%endif%}" href="/about">About</a>
+              <a class="nav-link {%if nav_name == "about" %} active {%endif%}" href="{{ t.about_href }}">{{ t.nav_about }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ t.switch_href }}" hreflang="{{ t.switch_hreflang }}" lang="{{ t.switch_hreflang }}">{{ t.switch_label }}</a>
             </li>
             <!--li class="nav-item">
               <a class="nav-link disabled" aria-disabled="true">Disabled</a>

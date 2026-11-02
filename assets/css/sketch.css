@@ -380,6 +380,32 @@ button {
   margin-left: auto;
 }
 
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 var(--space-100);
+  border: 1.5px solid var(--ink);
+  background: var(--paper-2);
+  color: var(--ink);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  transition: transform 300ms var(--ease), background-color 300ms var(--ease);
+}
+
+.lang-switch:hover {
+  transform: rotate(-6deg);
+}
+
+.lang-switch:active {
+  transform: scale(0.98);
+}
+
 .icon-btn {
   width: 36px;
   height: 36px;

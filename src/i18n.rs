@@ -1,0 +1,370 @@
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Lang {
+    Zh,
+    En,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Page {
+    Home,
+    About,
+}
+
+impl Lang {
+    pub fn html_lang(self) -> &'static str {
+        match self {
+            Lang::Zh => "zh-CN",
+            Lang::En => "en",
+        }
+    }
+
+    pub fn home_href(self) -> &'static str {
+        match self {
+            Lang::Zh => "/",
+            Lang::En => "/en",
+        }
+    }
+
+    pub fn about_href(self) -> &'static str {
+        match self {
+            Lang::Zh => "/about",
+            Lang::En => "/en/about",
+        }
+    }
+
+    pub fn other(self) -> Self {
+        match self {
+            Lang::Zh => Lang::En,
+            Lang::En => Lang::Zh,
+        }
+    }
+}
+
+impl Page {
+    pub fn href(self, lang: Lang) -> &'static str {
+        match (self, lang) {
+            (Page::Home, Lang::Zh) => "/",
+            (Page::Home, Lang::En) => "/en",
+            (Page::About, Lang::Zh) => "/about",
+            (Page::About, Lang::En) => "/en/about",
+        }
+    }
+}
+
+pub struct T {
+    pub html_lang: &'static str,
+    pub home_href: &'static str,
+    pub about_href: &'static str,
+    pub switch_href: &'static str,
+    pub switch_label: &'static str,
+    pub switch_hreflang: &'static str,
+    pub alt_zh_href: &'static str,
+    pub alt_en_href: &'static str,
+    pub skip_to_content: &'static str,
+    pub nav_label: &'static str,
+    pub nav_home: &'static str,
+    pub nav_about: &'static str,
+    pub nav_menu: &'static str,
+    pub menu_open: &'static str,
+    pub menu_close: &'static str,
+    pub theme_to_dark: &'static str,
+    pub theme_to_light: &'static str,
+    pub theme_toggle: &'static str,
+    pub page_title: &'static str,
+    pub meta_description: &'static str,
+    pub og_title: &'static str,
+    pub og_description: &'static str,
+    pub eyebrow: &'static str,
+    pub hero_title_1: &'static str,
+    pub hero_title_2: &'static str,
+    pub hero_sub_1: &'static str,
+    pub hero_sub_2: &'static str,
+    pub cta_github: &'static str,
+    pub hero_proof: &'static str,
+    pub hero_alt: &'static str,
+    pub proof_label: &'static str,
+    pub proof_rust: &'static str,
+    pub proof_go: &'static str,
+    pub proof_graph: &'static str,
+    pub tagline_label: &'static str,
+    pub tagline_1: &'static str,
+    pub tagline_2: &'static str,
+    pub problem_kicker: &'static str,
+    pub problem_title: &'static str,
+    pub problem_lead: &'static str,
+    pub problem_card1_title: &'static str,
+    pub problem_card1_body: &'static str,
+    pub problem_card2_title: &'static str,
+    pub problem_card2_body: &'static str,
+    pub benefit_kicker: &'static str,
+    pub benefit_title: &'static str,
+    pub benefit1_title: &'static str,
+    pub benefit1_body: &'static str,
+    pub benefit1_alt: &'static str,
+    pub benefit2_title: &'static str,
+    pub benefit2_body: &'static str,
+    pub benefit2_alt: &'static str,
+    pub benefit3_title: &'static str,
+    pub benefit3_body: &'static str,
+    pub benefit3_alt: &'static str,
+    pub how_kicker: &'static str,
+    pub how_title: &'static str,
+    pub step1_title: &'static str,
+    pub step1_body: &'static str,
+    pub step2_title: &'static str,
+    pub step2_body: &'static str,
+    pub step3_title: &'static str,
+    pub step3_body: &'static str,
+    pub work_kicker: &'static str,
+    pub work_title: &'static str,
+    pub work1_title: &'static str,
+    pub work1_body: &'static str,
+    pub work2_title: &'static str,
+    pub work2_body: &'static str,
+    pub work3_title: &'static str,
+    pub work3_body: &'static str,
+    pub work_meta_translate: &'static str,
+    pub faq_kicker: &'static str,
+    pub faq_title: &'static str,
+    pub faq1_q: &'static str,
+    pub faq1_a: &'static str,
+    pub faq2_q: &'static str,
+    pub faq2_a: &'static str,
+    pub faq3_q: &'static str,
+    pub faq3_a: &'static str,
+    pub faq4_q: &'static str,
+    pub faq4_a_before: &'static str,
+    pub faq4_a_after: &'static str,
+    pub faq5_q: &'static str,
+    pub faq5_a: &'static str,
+    pub faq6_q: &'static str,
+    pub faq6_a: &'static str,
+    pub final_title: &'static str,
+    pub final_sub: &'static str,
+    pub cta_about: &'static str,
+    pub footer_line: &'static str,
+    pub about_heading: &'static str,
+    pub about_lead: &'static str,
+}
+
+impl T {
+    pub fn new(lang: Lang, page: Page) -> Self {
+        let mut t = match lang {
+            Lang::Zh => Self::zh(),
+            Lang::En => Self::en(),
+        };
+        t.html_lang = lang.html_lang();
+        t.home_href = lang.home_href();
+        t.about_href = lang.about_href();
+        t.alt_zh_href = page.href(Lang::Zh);
+        t.alt_en_href = page.href(Lang::En);
+        t.switch_href = page.href(lang.other());
+        match lang {
+            Lang::Zh => {
+                t.switch_label = "EN";
+                t.switch_hreflang = "en";
+            }
+            Lang::En => {
+                t.switch_label = "中文";
+                t.switch_hreflang = "zh-CN";
+            }
+        }
+        t
+    }
+
+    fn zh() -> Self {
+        Self {
+            html_lang: "zh-CN",
+            home_href: "/",
+            about_href: "/about",
+            switch_href: "/en",
+            switch_label: "EN",
+            switch_hreflang: "en",
+            alt_zh_href: "/",
+            alt_en_href: "/en",
+            skip_to_content: "跳到正文",
+            nav_label: "主导航",
+            nav_home: "首页",
+            nav_about: "关于",
+            nav_menu: "菜单",
+            menu_open: "打开菜单",
+            menu_close: "关闭菜单",
+            theme_to_dark: "切换到深色",
+            theme_to_light: "切换到浅色",
+            theme_toggle: "切换外观",
+            page_title: "陈涛 · 把想法画进代码里",
+            meta_description: "陈涛的个人站点。写 Rust 与 Go，整理设计模式，把做过的路留给后来者。",
+            og_title: "陈涛 · 把想法画进代码里",
+            og_description: "写 Rust 与 Go，整理设计模式，把做过的路留给后来者。",
+            eyebrow: "CHEN.TAO · 笔记录",
+            hero_title_1: "把想法",
+            hero_title_2: "画进代码里",
+            hero_sub_1: "陈涛的个人站点。写 Rust 与 Go，整理设计模式。",
+            hero_sub_2: "把做过的路留给后来者。",
+            cta_github: "打开 GitHub",
+            hero_proof: "开源《Rust 设计模式与最佳实践》 · GitHub @hilerchyn",
+            hero_alt: "钢笔速写：书桌上摊开的笔记、钢笔、咖啡杯和笔记本电脑",
+            proof_label: "关注方向",
+            proof_rust: "Rust 设计模式",
+            proof_go: "Go 工程笔记",
+            proof_graph: "图结构与翻译",
+            tagline_label: "核心句子",
+            tagline_1: "先把问题画清楚",
+            tagline_2: "再把答案写进仓库",
+            problem_kicker: "问题",
+            problem_title: "过程常被藏在提交里",
+            problem_lead: "模式、翻译、图结构，做过一遍就散落在不同仓库。后来的自己也要重新翻一遍历史。",
+            problem_card1_title: "摊开路径",
+            problem_card1_body: "把设计模式写成可读的笔记，把 DAG、Web、翻译稿放在同一条线上，方便对照。",
+            problem_card2_title: "公开可查",
+            problem_card2_body: "不设账号墙。打开 GitHub 就能读源码、提问题、顺着提交往回看。",
+            benefit_kicker: "你会带走什么",
+            benefit_title: "三件可以立刻用上的东西",
+            benefit1_title: "可对照的笔记",
+            benefit1_body: "《Rust 设计模式与最佳实践》开源在仓库里，模式旁边就是实现。",
+            benefit1_alt: "钢笔速写：摊开的技术笔记，页面上是代码痕迹与流程图",
+            benefit2_title: "从原文到中文",
+            benefit2_body: "Go 官网《编写网页应用程序》的中文翻译，按原文结构走，方便对照阅读。",
+            benefit2_alt: "钢笔速写：指南针压在折叠的地形图上",
+            benefit3_title: "图结构的实现",
+            benefit3_body: "有向无环图的 Go 实现。看节点怎么连，比只看定义要清楚。",
+            benefit3_alt: "钢笔速写：有向无环图，节点与箭头画在笔记纸上",
+            how_kicker: "怎么用这个站点",
+            how_title: "三步，不用注册",
+            step1_title: "先读一页笔记",
+            step1_body: "从首页或仓库 README 进入，看问题是怎么被写下来的。",
+            step2_title: "再打开对应仓库",
+            step2_body: "笔记里提到的模式、图、翻译，都有可以克隆的源码。",
+            step3_title: "有问题就去提问",
+            step3_body: "在 GitHub 提 Issue。全部公开，不用留下邮箱。",
+            work_kicker: "公开的工作",
+            work_title: "可以直接打开的仓库",
+            work1_title: "Rust 设计模式与最佳实践",
+            work1_body: "把常见模式写成可读的笔记，源码与说明放在同一个仓库。",
+            work2_title: "DAG",
+            work2_body: "有向无环图的 Go 实现。",
+            work3_title: "编写网页应用程序",
+            work3_body: "Go 官网原文的中文翻译。",
+            work_meta_translate: "Go · 翻译",
+            faq_kicker: "常见问题",
+            faq_title: "先回答这几句",
+            faq1_q: "这是谁的站点？",
+            faq1_a: "陈涛，GitHub 用户名 hilerchyn。写 Rust 与 Go，也做技术翻译。",
+            faq2_q: "能在这里找到什么？",
+            faq2_a: "开源仓库入口、设计模式笔记、图结构实现，以及 Go 网页应用原文的中文翻译。",
+            faq3_q: "代码需要付费吗？",
+            faq3_a: "不需要。仓库公开，随时克隆，随时离开，也不用留下信用卡。",
+            faq4_q: "如何联系？",
+            faq4_a_before: "到",
+            faq4_a_after: "提 Issue，或看仓库里的讨论。",
+            faq5_q: "这个站点用什么搭建？",
+            faq5_a: "Rust、Axum、Askama。静态资源打包进二进制，页面是服务端渲染的模板。",
+            faq6_q: "为什么是手绘风格？",
+            faq6_a: "设计模式和图结构本来就像草稿。用手绘把思考过程留在纸面上，再写进代码。",
+            final_title: "把仓库打开，从一页笔记开始",
+            final_sub: "源码公开，提问公开。不用注册，也不用留下邮箱。",
+            cta_about: "看关于页",
+            footer_line: "陈涛 / chen.tao · 画过的，才写得清楚",
+            about_heading: "关于",
+            about_lead: "写 Rust 与 Go，整理设计模式，也做技术翻译。",
+        }
+    }
+
+    fn en() -> Self {
+        Self {
+            html_lang: "en",
+            home_href: "/en",
+            about_href: "/en/about",
+            switch_href: "/",
+            switch_label: "中文",
+            switch_hreflang: "zh-CN",
+            alt_zh_href: "/",
+            alt_en_href: "/en",
+            skip_to_content: "Skip to content",
+            nav_label: "Main",
+            nav_home: "Home",
+            nav_about: "About",
+            nav_menu: "Menu",
+            menu_open: "Open menu",
+            menu_close: "Close menu",
+            theme_to_dark: "Switch to dark",
+            theme_to_light: "Switch to light",
+            theme_toggle: "Switch appearance",
+            page_title: "Chen Tao · Sketch the idea into the code",
+            meta_description: "Chen Tao's site. Notes on Rust and Go, design patterns, and the path left for whoever comes next.",
+            og_title: "Chen Tao · Sketch the idea into the code",
+            og_description: "Notes on Rust and Go, design patterns, and the path left for whoever comes next.",
+            eyebrow: "CHEN.TAO · ink notes",
+            hero_title_1: "Sketch the idea",
+            hero_title_2: "into the code",
+            hero_sub_1: "Chen Tao's site. Notes on Rust and Go, design patterns.",
+            hero_sub_2: "The path is left for whoever comes next.",
+            cta_github: "Open GitHub",
+            hero_proof: "Open source Rust Design Patterns and Best Practices · GitHub @hilerchyn",
+            hero_alt: "Ink sketch of a desk with an open notebook, fountain pen, coffee cup, and laptop",
+            proof_label: "Focus",
+            proof_rust: "Rust design patterns",
+            proof_go: "Go engineering notes",
+            proof_graph: "Graphs and translation",
+            tagline_label: "Tagline",
+            tagline_1: "Sketch the problem first",
+            tagline_2: "Then write the answer into the repo",
+            problem_kicker: "The gap",
+            problem_title: "The process hides in commits",
+            problem_lead: "Patterns, translations, and graphs scatter across repos. Later you have to dig through history to find the path again.",
+            problem_card1_title: "Lay the path out",
+            problem_card1_body: "Write design patterns as readable notes. Keep DAG, web, and translation work on one line so they can be compared.",
+            problem_card2_title: "Public and searchable",
+            problem_card2_body: "No account wall. Open GitHub to read the source, ask a question, and walk back through the commits.",
+            benefit_kicker: "What you take with you",
+            benefit_title: "Three things you can use right away",
+            benefit1_title: "Notes you can compare",
+            benefit1_body: "Rust Design Patterns and Best Practices is open in the repo, with the pattern next to the code.",
+            benefit1_alt: "Ink sketch of an open technical notebook with code marks and flow diagrams",
+            benefit2_title: "From the original to Chinese",
+            benefit2_body: "A Chinese translation of Writing Web Applications from the Go site, following the original structure.",
+            benefit2_alt: "Ink sketch of a compass resting on a folded map",
+            benefit3_title: "A graph you can run",
+            benefit3_body: "A directed acyclic graph in Go. Seeing how the nodes connect is clearer than a definition alone.",
+            benefit3_alt: "Ink sketch of a directed acyclic graph with nodes and arrows",
+            how_kicker: "How to use this site",
+            how_title: "Three steps, no signup",
+            step1_title: "Read one page of notes",
+            step1_body: "Start from the home page or a README and see how the problem was written down.",
+            step2_title: "Open the matching repo",
+            step2_body: "The patterns, graphs, and translations in the notes all have source you can clone.",
+            step3_title: "Ask on GitHub",
+            step3_body: "Open an Issue. It is all public. You do not leave an email.",
+            work_kicker: "Public work",
+            work_title: "Repos you can open now",
+            work1_title: "Rust Design Patterns and Best Practices",
+            work1_body: "Common patterns as readable notes, with source and explanation in the same repo.",
+            work2_title: "DAG",
+            work2_body: "A directed acyclic graph in Go.",
+            work3_title: "Writing Web Applications",
+            work3_body: "A Chinese translation of the original Go article.",
+            work_meta_translate: "Go · translation",
+            faq_kicker: "Questions",
+            faq_title: "A few answers first",
+            faq1_q: "Whose site is this?",
+            faq1_a: "Chen Tao, GitHub username hilerchyn. I write Rust and Go, and I translate technical writing.",
+            faq2_q: "What will I find here?",
+            faq2_a: "Open source repos, design pattern notes, a graph implementation, and a Chinese translation of the Go web app article.",
+            faq3_q: "Do I have to pay for the code?",
+            faq3_a: "No. The repos are public. Clone them, leave whenever you want, and you never leave a card.",
+            faq4_q: "How do I get in touch?",
+            faq4_a_before: "Open an Issue on",
+            faq4_a_after: "or read the discussion in the repos.",
+            faq5_q: "What is this site built with?",
+            faq5_a: "Rust, Axum, and Askama. Static files are packed into the binary. Pages are server rendered templates.",
+            faq6_q: "Why the ink sketch look?",
+            faq6_a: "Design patterns and graphs start as drafts. The drawing keeps the thinking on the page, then it goes into the code.",
+            final_title: "Open a repo. Start with one page of notes.",
+            final_sub: "Source is public. Questions are public. No signup, and no email to leave.",
+            cta_about: "Read about",
+            footer_line: "Chen Tao / chen.tao · What you sketch, you can write clearly",
+            about_heading: "About",
+            about_lead: "I write Rust and Go, keep notes on design patterns, and translate technical writing.",
+        }
+    }
+}
