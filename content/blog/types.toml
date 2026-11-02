@@ -1,0 +1,50 @@
+# 文章类型。要加一类：复制一段 [[type]]，改 id，再建同名目录。
+# 目录里没有登记的文件夹也会出现在列表里，名称先用文件夹名。
+
+[[type]]
+id = "architecture"
+order = 1
+name_zh = "架构设计"
+name_en = "Architecture"
+desc_zh = "系统怎么拆，边界画在哪里。"
+desc_en = "How the system splits, and where the edges go."
+
+[[type]]
+id = "programming"
+order = 2
+name_zh = "编程沉思"
+name_en = "Programming"
+desc_zh = "写代码时反复碰到的问题，先记下来。"
+desc_en = "Problems that keep coming back while writing code."
+
+[[type]]
+id = "reading"
+order = 3
+name_zh = "读书笔记"
+name_en = "Reading"
+desc_zh = "对照原文读完，把留下的句子摊开。"
+desc_en = "Notes left after reading against the original."
+
+[[type]]
+id = "project"
+order = 4
+name_zh = "项目管理"
+name_en = "Projects"
+desc_zh = "怎么让路径可接手，而不是只留在一个人的脑子里。"
+desc_en = "How the path stays handoff-ready, not stuck in one head."
+
+[[type]]
+id = "product"
+order = 5
+name_zh = "产品设计"
+name_en = "Product"
+desc_zh = "先把问题画在纸上，再决定做什么。"
+desc_en = "Sketch the problem on paper before deciding what to build."
+
+[[type]]
+id = "ai"
+order = 6
+name_zh = "AI探索"
+name_en = "AI"
+desc_zh = "把模型当工具，问题仍留在自己手里。"
+desc_en = "The model is a tool. The problem stays in your hands."

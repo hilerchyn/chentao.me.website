@@ -1,0 +1,50 @@
+<!doctype html>
+<html
+  lang="{{ t.html_lang }}"
+  data-theme="light"
+  data-i18n-theme-dark="{{ t.theme_to_dark }}"
+  data-i18n-theme-light="{{ t.theme_to_light }}"
+  data-i18n-menu-open="{{ t.menu_open }}"
+  data-i18n-menu-close="{{ t.menu_close }}"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ post_title }} · {{ t.nav_blog }}</title>
+    <meta name="description" content="{{ summary }}" />
+    <meta name="author" content="陈涛 / chen.tao" />
+    <meta property="og:title" content="{{ post_title }}" />
+    <meta property="og:description" content="{{ summary }}" />
+    <meta property="og:type" content="article" />
+    <meta name="theme-color" content="#f4efe4" />
+    <link rel="alternate" hreflang="zh-CN" href="{{ alt_zh_href }}" />
+    <link rel="alternate" hreflang="en" href="{{ alt_en_href }}" />
+    <link rel="alternate" hreflang="x-default" href="{{ alt_zh_href }}" />
+    <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/sketch.css" />
+  </head>
+  <body data-page="{{ nav_name }}">
+    <a class="skip-link" href="#main">{{ t.skip_to_content }}</a>
+    {% include "nav.html" %}
+
+    <main id="main" class="blog-post">
+      <article class="wrap post-article">
+        <p class="eyebrow caption-3">
+          <a href="{{ kind_href }}">{{ kind_name }}</a>
+        </p>
+        <h1 class="heading-2">{{ post_title }}</h1>
+        <p class="caption-4 post-date">
+          <time datetime="{{ date }}">{{ date }}</time>
+        </p>
+        <div class="prose body-3">{{ body|safe }}</div>
+        <p class="post-back">
+          <a class="btn btn-ghost button-sm" href="{{ t.blog_href }}">{{ t.blog.back }}</a>
+        </p>
+      </article>
+    </main>
+
+    {% include "footer.html" %}
+    <script src="/static/js/sketch.js"></script>
+  </body>
+</html>

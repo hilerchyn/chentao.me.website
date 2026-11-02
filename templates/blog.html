@@ -1,0 +1,87 @@
+<!doctype html>
+<html
+  lang="{{ t.html_lang }}"
+  data-theme="light"
+  data-i18n-theme-dark="{{ t.theme_to_dark }}"
+  data-i18n-theme-light="{{ t.theme_to_light }}"
+  data-i18n-menu-open="{{ t.menu_open }}"
+  data-i18n-menu-close="{{ t.menu_close }}"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ heading }} · {{ t.nav_blog }}</title>
+    <meta name="description" content="{{ lead }}" />
+    <meta name="author" content="陈涛 / chen.tao" />
+    <meta property="og:title" content="{{ heading }}" />
+    <meta property="og:description" content="{{ lead }}" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#f4efe4" />
+    <link rel="alternate" hreflang="zh-CN" href="{{ alt_zh_href }}" />
+    <link rel="alternate" hreflang="en" href="{{ alt_en_href }}" />
+    <link rel="alternate" hreflang="x-default" href="/blog" />
+    <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/sketch.css" />
+  </head>
+  <body data-page="{{ nav_name }}">
+    <a class="skip-link" href="#main">{{ t.skip_to_content }}</a>
+    {% include "nav.html" %}
+
+    <main id="main" class="blog">
+      <section class="blog-hero">
+        <div class="wrap">
+          <p class="eyebrow caption-3">{{ t.blog.eyebrow }}</p>
+          <h1 class="heading-1 hero-title">{{ heading }}</h1>
+          <p class="body-3 hero-sub">{{ lead }}</p>
+          <ul class="type-pills" aria-label="{{ t.nav_blog }}">
+            <li>
+              <a class="type-pill{% if all_active %} is-on{% endif %}" href="{{ t.blog_href }}">{{ t.blog.all }}</a>
+            </li>
+            {% for kind in kinds %}
+            <li>
+              <a class="type-pill{% if kind.active %} is-on{% endif %}" href="{{ kind.href }}" title="{{ kind.desc }}" data-kind="{{ kind.id }}">{{ kind.name }} <span class="caption-4">{{ kind.count }}</span></a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+
+      <section class="section blog-list">
+        <div class="wrap">
+          {% if posts.is_empty() %}
+          <p class="body-3 empty-note">{% if all_active %}{{ t.blog.empty }}{% else %}{{ t.blog.empty_type }}{% endif %}</p>
+          {% else %}
+          <ol class="post-list">
+            {% for post in posts %}
+            <li class="post-card reveal">
+              <p class="caption-3 post-kicker">
+                <a href="{{ post.kind_href }}">{{ post.kind_name }}</a>
+                <span aria-hidden="true"> · </span>
+                <time datetime="{{ post.date }}">{{ post.date }}</time>
+              </p>
+              <h2 class="heading-5">
+                <a href="{{ post.href }}">{{ post.title }}</a>
+              </h2>
+              <p class="body-6">{{ post.summary }}</p>
+              <a class="caption-4 post-read" href="{{ post.href }}">{{ t.blog.read }}</a>
+            </li>
+            {% endfor %}
+          </ol>
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="section blog-how">
+        <div class="wrap">
+          <p class="section-kicker caption-3">{{ t.blog.how_kicker }}</p>
+          <h2 class="heading-3">{{ t.blog.how_title }}</h2>
+          <p class="section-lead body-3">{{ t.blog.how_body }}</p>
+        </div>
+      </section>
+    </main>
+
+    {% include "footer.html" %}
+    <script src="/static/js/sketch.js"></script>
+  </body>
+</html>

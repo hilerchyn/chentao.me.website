@@ -8,8 +8,11 @@ publish = false
 askama = { version = "0.16", default-features = false, features = ["std", "derive"] }
 axum = { version = "0.8.9" }
 mime_guess = "2.0.5"
+pulldown-cmark = { version = "0.13", default-features = false, features = ["html"] }
 rust-embed = { version = "8.13.0", features = ["axum", "mime_guess"] }
+serde = { version = "1", features = ["derive"] }
 tokio = { version = "1.0", features = ["full"] }
+toml = "0.8"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 

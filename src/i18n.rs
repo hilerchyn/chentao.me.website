@@ -1,4 +1,4 @@
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Lang {
     Zh,
     En,
@@ -8,6 +8,7 @@ pub enum Lang {
 pub enum Page {
     Home,
     About,
+    Blog,
 }
 
 impl Lang {
@@ -32,6 +33,13 @@ impl Lang {
         }
     }
 
+    pub fn blog_href(self) -> &'static str {
+        match self {
+            Lang::Zh => "/blog",
+            Lang::En => "/en/blog",
+        }
+    }
+
     pub fn other(self) -> Self {
         match self {
             Lang::Zh => Lang::En,
@@ -47,6 +55,8 @@ impl Page {
             (Page::Home, Lang::En) => "/en",
             (Page::About, Lang::Zh) => "/about",
             (Page::About, Lang::En) => "/en/about",
+            (Page::Blog, Lang::Zh) => "/blog",
+            (Page::Blog, Lang::En) => "/en/blog",
         }
     }
 }
@@ -126,10 +136,27 @@ pub struct Resume {
     pub final_sub: &'static str,
 }
 
+pub struct BlogUi {
+    pub eyebrow: &'static str,
+    pub title: &'static str,
+    pub lead: &'static str,
+    pub all: &'static str,
+    pub empty: &'static str,
+    pub empty_type: &'static str,
+    pub how_kicker: &'static str,
+    pub how_title: &'static str,
+    pub how_body: &'static str,
+    pub read: &'static str,
+    pub back: &'static str,
+    pub page_title: &'static str,
+    pub meta_description: &'static str,
+}
+
 pub struct T {
     pub html_lang: &'static str,
     pub home_href: &'static str,
     pub about_href: &'static str,
+    pub blog_href: &'static str,
     pub switch_href: &'static str,
     pub switch_label: &'static str,
     pub switch_hreflang: &'static str,
@@ -139,6 +166,7 @@ pub struct T {
     pub nav_label: &'static str,
     pub nav_home: &'static str,
     pub nav_about: &'static str,
+    pub nav_blog: &'static str,
     pub nav_menu: &'static str,
     pub menu_open: &'static str,
     pub menu_close: &'static str,
@@ -219,6 +247,7 @@ pub struct T {
     pub cta_about: &'static str,
     pub footer_line: &'static str,
     pub resume: Resume,
+    pub blog: BlogUi,
 }
 
 impl T {
@@ -230,6 +259,7 @@ impl T {
         t.html_lang = lang.html_lang();
         t.home_href = lang.home_href();
         t.about_href = lang.about_href();
+        t.blog_href = lang.blog_href();
         t.alt_zh_href = page.href(Lang::Zh);
         t.alt_en_href = page.href(Lang::En);
         t.switch_href = page.href(lang.other());
@@ -249,6 +279,12 @@ impl T {
             t.og_title = t.resume.page_title;
             t.og_description = t.resume.lead;
         }
+        if page == Page::Blog {
+            t.page_title = t.blog.page_title;
+            t.meta_description = t.blog.meta_description;
+            t.og_title = t.blog.page_title;
+            t.og_description = t.blog.lead;
+        }
         t
     }
 
@@ -257,6 +293,7 @@ impl T {
             html_lang: "zh-CN",
             home_href: "/",
             about_href: "/about",
+            blog_href: "/blog",
             switch_href: "/en",
             switch_label: "EN",
             switch_hreflang: "en",
@@ -266,6 +303,7 @@ impl T {
             nav_label: "主导航",
             nav_home: "首页",
             nav_about: "关于",
+            nav_blog: "博客",
             nav_menu: "菜单",
             menu_open: "打开菜单",
             menu_close: "关闭菜单",
@@ -419,6 +457,21 @@ impl T {
                 final_title: "打开仓库，从一页笔记开始",
                 final_sub: "源码公开，提问公开。不用注册，也不用留下邮箱。",
             },
+            blog: BlogUi {
+                eyebrow: "博客 · NOTES",
+                title: "笔记与沉思",
+                lead: "按类型摊开。架构、编程、阅读、项目、产品、AI。要加一类，在 types.toml 里写一条，再放进同名目录。",
+                all: "全部",
+                empty: "这一类还没有文章。",
+                empty_type: "这一类还在写。先看其他类型。",
+                how_kicker: "怎么写",
+                how_title: "加一类，或加一篇",
+                how_body: "类型写在 content/blog/types.toml。文章是 Markdown，文件名用 主题.zh.md / 主题.en.md，开头用 +++ 写标题、日期和摘要。",
+                read: "阅读",
+                back: "返回博客",
+                page_title: "陈涛 · 博客",
+                meta_description: "陈涛的博客。架构设计、编程沉思、读书笔记、项目管理、产品设计、AI探索。",
+            },
         }
     }
 
@@ -427,6 +480,7 @@ impl T {
             html_lang: "en",
             home_href: "/en",
             about_href: "/en/about",
+            blog_href: "/en/blog",
             switch_href: "/",
             switch_label: "中文",
             switch_hreflang: "zh-CN",
@@ -436,6 +490,7 @@ impl T {
             nav_label: "Main",
             nav_home: "Home",
             nav_about: "About",
+            nav_blog: "Blog",
             nav_menu: "Menu",
             menu_open: "Open menu",
             menu_close: "Close menu",
@@ -588,6 +643,21 @@ impl T {
                 visual_alt: "Ink sketch of an open resume on a desk, two columns of notes, a fountain pen across the page",
                 final_title: "Open a repo. Start with one page of notes.",
                 final_sub: "Source is public. Questions are public. No signup, and no email to leave.",
+            },
+            blog: BlogUi {
+                eyebrow: "Blog · notes",
+                title: "Notes and reflections",
+                lead: "Laid out by type: architecture, programming, reading, projects, product, and AI. To add a type, write a row in types.toml and put files in a folder of the same name.",
+                all: "All",
+                empty: "No articles in this type yet.",
+                empty_type: "This type is still being written. Look at the others first.",
+                how_kicker: "How to write",
+                how_title: "Add a type, or add a post",
+                how_body: "Types live in content/blog/types.toml. Posts are Markdown named topic.zh.md / topic.en.md, with title, date, and summary inside +++.",
+                read: "Read",
+                back: "Back to the blog",
+                page_title: "Chen Tao · Blog",
+                meta_description: "Chen Tao's blog. Architecture, programming, reading notes, projects, product, and AI.",
             },
         }
     }
