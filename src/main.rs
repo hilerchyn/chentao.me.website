@@ -143,4 +143,37 @@ mod tests {
 
         assert_eq!(html, "<h1>Hello, Foo!</h1>");
     }
+
+    #[tokio::test]
+    async fn test_home_page() {
+        let response = app()
+            .oneshot(Request::get("/").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(response.status(), StatusCode::OK);
+        let body = response.into_body();
+        let bytes = body.collect().await.unwrap().to_bytes();
+        let html = String::from_utf8(bytes.to_vec()).unwrap();
+
+        assert!(html.contains("把想法"));
+        assert!(html.contains("打开 GitHub"));
+        assert!(html.contains("/static/css/sketch.css"));
+        assert!(html.contains("/static/img/hero-desk.jpg"));
+    }
+
+    #[tokio::test]
+    async fn test_home_assets() {
+        for path in [
+            "/static/css/sketch.css",
+            "/static/js/sketch.js",
+            "/static/img/hero-desk.jpg",
+            "/static/img/favicon.svg",
+        ] {
+            let response = app()
+                .oneshot(Request::get(path).body(Body::empty()).unwrap())
+                .await
+                .unwrap();
+            assert_eq!(response.status(), StatusCode::OK, "missing {path}");
+        }
+    }
 }
