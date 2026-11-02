@@ -1,12 +1,12 @@
     <nav class="site-nav" aria-label="{{ t.nav_label }}">
       <a class="brand" href="{{ t.home_href }}">
-        <img
-          class="brand-mark"
-          src="/static/img/mark-nib.jpg"
-          width="32"
-          height="32"
-          alt=""
-        />
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M16 5 L23 16 L16 27 L9 16 Z" stroke="currentColor" stroke-width="1.25"/>
+            <path d="M16 5 V14" stroke="currentColor" stroke-width="1.25"/>
+            <rect x="15" y="15" width="2" height="2" fill="currentColor"/>
+          </svg>
+        </span>
         <span class="title-3 brand-name">陈涛</span>
       </a>
       <ul class="nav-links">
