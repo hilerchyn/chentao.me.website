@@ -66,12 +66,16 @@ fn app() -> Router {
 }
 
 async fn handler_home() -> impl IntoResponse {
-    let template = HomeTemplate {};
+    let template = HomeTemplate {
+        nav_name: String::from("home"),
+    };
     HtmlTemplate(template)
 }
 
 async fn handler_about() -> impl IntoResponse {
-    let template = AboutTemplate {};
+    let template = AboutTemplate {
+        nav_name: String::from("about"),
+    };
     HtmlTemplate(template)
 }
 
@@ -88,11 +92,15 @@ struct HelloTemplate {
 
 #[derive(Template)]
 #[template(path = "home.html")]
-struct HomeTemplate {}
+struct HomeTemplate {
+    nav_name: String,
+}
 
 #[derive(Template)]
 #[template(path = "about.html")]
-struct AboutTemplate {}
+struct AboutTemplate {
+    nav_name: String,
+}
 
 struct HtmlTemplate<T>(T);
 
