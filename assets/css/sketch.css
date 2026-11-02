@@ -1088,35 +1088,44 @@ button {
   align-items: center;
 }
 
+.resume-identity > .eyebrow {
+  margin-bottom: var(--space-300);
+}
+
 .resume-head {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-400);
-  margin-bottom: var(--space-300);
+  margin-bottom: var(--space-400);
 }
 
 .resume-avatar {
   margin: 0;
   flex-shrink: 0;
   width: 120px;
+  height: 120px;
   border: var(--stroke) solid var(--ink);
   background: var(--paper-2);
 }
 
 .resume-avatar img {
   width: 100%;
-  aspect-ratio: 1;
+  height: 100%;
   object-fit: cover;
-  object-position: center 18%;
+  object-position: center 12%;
   display: block;
 }
 
-.resume-head-copy .eyebrow {
-  margin-bottom: var(--space-200);
+.resume-head-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-75);
 }
 
 .resume-head-copy .hero-title {
-  margin-bottom: var(--space-100);
+  margin: 0;
 }
 
 .resume-role {
@@ -1492,6 +1501,7 @@ button {
 
   .resume-avatar {
     width: 96px;
+    height: 96px;
   }
 
   .final-frame {
