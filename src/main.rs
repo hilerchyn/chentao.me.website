@@ -189,6 +189,26 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn test_about_page() {
+        let response = app()
+            .oneshot(Request::get("/about").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(response.status(), StatusCode::OK);
+        let body = response.into_body();
+        let bytes = body.collect().await.unwrap().to_bytes();
+        let html = String::from_utf8(bytes.to_vec()).unwrap();
+
+        assert!(html.contains("简历"));
+        assert!(html.contains("管理能力"));
+        assert!(html.contains("技术能力"));
+        assert!(html.contains("lang=\"zh-CN\""));
+        assert!(html.contains("href=\"/en/about\""));
+        assert!(html.contains("/static/css/sketch.css"));
+        assert!(html.contains("/static/img/resume-desk.jpg"));
+    }
+
+    #[tokio::test]
     async fn test_about_page_en() {
         let response = app()
             .oneshot(Request::get("/en/about").body(Body::empty()).unwrap())
@@ -199,9 +219,12 @@ mod tests {
         let bytes = body.collect().await.unwrap().to_bytes();
         let html = String::from_utf8(bytes.to_vec()).unwrap();
 
-        assert!(html.contains("About"));
+        assert!(html.contains("Resume"));
+        assert!(html.contains("Management"));
+        assert!(html.contains("Technical"));
         assert!(html.contains("lang=\"en\""));
-        assert!(html.contains("/en/about") || html.contains("href=\"/about\""));
+        assert!(html.contains("href=\"/about\""));
+        assert!(html.contains("/static/css/sketch.css"));
     }
 
     #[tokio::test]
@@ -210,6 +233,7 @@ mod tests {
             "/static/css/sketch.css",
             "/static/js/sketch.js",
             "/static/img/hero-desk.jpg",
+            "/static/img/resume-desk.jpg",
             "/static/img/favicon.svg",
         ] {
             let response = app()

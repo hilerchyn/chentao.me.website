@@ -1,18 +1,352 @@
-{% extends "base.html" %}
+<!doctype html>
+<html
+  lang="{{ t.html_lang }}"
+  data-theme="light"
+  data-i18n-theme-dark="{{ t.theme_to_dark }}"
+  data-i18n-theme-light="{{ t.theme_to_light }}"
+  data-i18n-menu-open="{{ t.menu_open }}"
+  data-i18n-menu-close="{{ t.menu_close }}"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ t.page_title }}</title>
+    <meta name="description" content="{{ t.meta_description }}" />
+    <meta name="author" content="陈涛 / chen.tao" />
+    <meta property="og:title" content="{{ t.og_title }}" />
+    <meta property="og:description" content="{{ t.og_description }}" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#f4efe4" />
+    <link rel="alternate" hreflang="zh-CN" href="{{ t.alt_zh_href }}" />
+    <link rel="alternate" hreflang="en" href="{{ t.alt_en_href }}" />
+    <link rel="alternate" hreflang="x-default" href="/" />
+    <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/sketch.css" />
+  </head>
+  <body data-page="{{ nav_name }}">
+    <a class="skip-link" href="#main">{{ t.skip_to_content }}</a>
 
-{% block title %}{{ t.about_heading }} · {{ t.page_title }}{% endblock %}
-
-{% block content %}
-      <div class="bg-body-tertiary p-5 rounded">
-        <h1>{{ t.about_heading }}</h1>
-        <p class="lead">
-          {{ t.about_lead }}
-        </p>
-        <a
-          class="btn btn-lg btn-primary"
-          href="https://github.com/hilerchyn"
-          role="button"
-          >{{ t.cta_github }}</a
+    <nav class="site-nav" aria-label="{{ t.nav_label }}">
+      <a class="brand" href="{{ t.home_href }}">
+        <img
+          class="brand-mark"
+          src="/static/img/mark-nib.jpg"
+          width="32"
+          height="32"
+          alt=""
+        />
+        <span class="title-3 brand-name">陈涛</span>
+      </a>
+      <ul class="nav-links">
+        <li>
+          <a class="title-4" href="{{ t.home_href }}">{{ t.nav_home }}</a>
+        </li>
+        <li>
+          <a class="title-4" href="{{ t.about_href }}" aria-current="page">{{ t.nav_about }}</a>
+        </li>
+        <li>
+          <a
+            class="title-4"
+            href="https://github.com/hilerchyn"
+            rel="noopener noreferrer"
+            >GitHub</a
+          >
+        </li>
+      </ul>
+      <div class="nav-tools">
+        <button
+          class="icon-btn nav-toggle"
+          type="button"
+          data-nav-toggle
+          aria-expanded="false"
+          aria-controls="mobile-panel"
+          aria-label="{{ t.menu_open }}"
         >
+          <span class="nav-toggle-label">{{ t.nav_menu }}</span>
+          <svg class="icon-open" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+            <path
+              d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"
+            />
+          </svg>
+          <svg class="icon-close" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+            <path
+              d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+            />
+          </svg>
+        </button>
+        <a
+          class="lang-switch"
+          href="{{ t.switch_href }}"
+          hreflang="{{ t.switch_hreflang }}"
+          lang="{{ t.switch_hreflang }}"
+          >{{ t.switch_label }}</a
+        >
+        <button
+          class="icon-btn"
+          type="button"
+          data-theme-toggle
+          aria-label="{{ t.theme_to_dark }}"
+        >
+          <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+            <path
+              d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM40,120H16a8,8,0,0,0,0,16H40a8,8,0,0,0,0-16Zm88,88a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"
+            />
+          </svg>
+        </button>
       </div>
-{% endblock %}
+    </nav>
+
+    <div class="mobile-panel" id="mobile-panel" data-nav-panel>
+      <a href="{{ t.home_href }}">{{ t.nav_home }}</a>
+      <a href="{{ t.about_href }}">{{ t.nav_about }}</a>
+      <a href="https://github.com/hilerchyn" rel="noopener noreferrer">GitHub</a>
+      <a href="{{ t.switch_href }}" hreflang="{{ t.switch_hreflang }}" lang="{{ t.switch_hreflang }}">{{ t.switch_label }}</a>
+      <button type="button" class="panel-theme" data-theme-toggle>{{ t.theme_toggle }}</button>
+    </div>
+
+    <main id="main" class="resume">
+      <section class="resume-hero">
+        <div class="wrap resume-hero-grid">
+          <div class="resume-identity">
+            <p class="eyebrow caption-3">{{ t.resume.eyebrow }}</p>
+            <h1 class="heading-1 hero-title">{{ t.resume.name }}</h1>
+            <p class="title-2 resume-role">{{ t.resume.role }}</p>
+            <p class="body-3 hero-sub">{{ t.resume.lead }}</p>
+            <ul class="resume-meta">
+              <li class="caption-4">{{ t.resume.handle }}</li>
+              <li class="caption-4">{{ t.resume.location }}</li>
+            </ul>
+            <div class="hero-actions">
+              <a
+                class="btn btn-ink button-md"
+                href="https://github.com/hilerchyn"
+                rel="noopener noreferrer"
+              >
+                {{ t.resume.contact_github }}
+                <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"
+                  />
+                </svg>
+              </a>
+              <a class="btn btn-ghost button-md" href="{{ t.home_href }}">{{ t.resume.contact_home }}</a>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <figure class="taped resume-visual">
+              <span class="tape tape-tl" aria-hidden="true"></span>
+              <img
+                src="/static/img/resume-desk.jpg"
+                width="960"
+                height="540"
+                alt="{{ t.resume.visual_alt }}"
+              />
+              <span class="tape tape-br" aria-hidden="true"></span>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="section resume-pillars" aria-labelledby="pillars-title">
+        <div class="wrap">
+          <p class="section-kicker caption-3">{{ t.resume.pillars_kicker }}</p>
+          <h2 class="heading-2" id="pillars-title">{{ t.resume.pillars_title }}</h2>
+          <div class="pillar-grid">
+            <article class="pillar pillar-mgmt reveal">
+              <p class="pillar-index caption-3">01</p>
+              <h3 class="heading-4">{{ t.resume.mgmt_title }}</h3>
+              <p class="body-5 pillar-lead">{{ t.resume.mgmt_lead }}</p>
+              <ol class="pillar-list">
+                <li>
+                  <h4 class="title-3">{{ t.resume.mgmt1_title }}</h4>
+                  <p class="body-6">{{ t.resume.mgmt1_body }}</p>
+                </li>
+                <li>
+                  <h4 class="title-3">{{ t.resume.mgmt2_title }}</h4>
+                  <p class="body-6">{{ t.resume.mgmt2_body }}</p>
+                </li>
+                <li>
+                  <h4 class="title-3">{{ t.resume.mgmt3_title }}</h4>
+                  <p class="body-6">{{ t.resume.mgmt3_body }}</p>
+                </li>
+                <li>
+                  <h4 class="title-3">{{ t.resume.mgmt4_title }}</h4>
+                  <p class="body-6">{{ t.resume.mgmt4_body }}</p>
+                </li>
+              </ol>
+            </article>
+            <article class="pillar pillar-tech reveal">
+              <p class="pillar-index caption-3">02</p>
+              <h3 class="heading-4">{{ t.resume.tech_title }}</h3>
+              <p class="body-5 pillar-lead">{{ t.resume.tech_lead }}</p>
+              <ol class="pillar-list">
+                <li>
+                  <h4 class="title-3">{{ t.resume.tech1_title }}</h4>
+                  <p class="body-6">{{ t.resume.tech1_body }}</p>
+                </li>
+                <li>
+                  <h4 class="title-3">{{ t.resume.tech2_title }}</h4>
+                  <p class="body-6">{{ t.resume.tech2_body }}</p>
+                </li>
+                <li>
+                  <h4 class="title-3">{{ t.resume.tech3_title }}</h4>
+                  <p class="body-6">{{ t.resume.tech3_body }}</p>
+                </li>
+                <li>
+                  <h4 class="title-3">{{ t.resume.tech4_title }}</h4>
+                  <p class="body-6">{{ t.resume.tech4_body }}</p>
+                </li>
+              </ol>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section resume-work" aria-labelledby="work-title">
+        <div class="wrap">
+          <p class="section-kicker caption-3">{{ t.resume.work_kicker }}</p>
+          <h2 class="heading-2" id="work-title">{{ t.resume.work_title }}</h2>
+          <p class="section-lead body-3">{{ t.resume.work_lead }}</p>
+          <div class="resume-work-grid">
+            <a
+              class="work-card reveal"
+              href="https://github.com/hilerchyn/design-patterns-and-best-practices-in-rust"
+              rel="noopener noreferrer"
+            >
+              <div>
+                <h3 class="heading-6">{{ t.resume.work1_title }}</h3>
+                <p>{{ t.resume.work1_body }}</p>
+              </div>
+              <p class="work-meta caption-4">{{ t.resume.work1_meta }}</p>
+            </a>
+            <a
+              class="work-card small reveal"
+              href="https://github.com/hilerchyn/dag"
+              rel="noopener noreferrer"
+            >
+              <div>
+                <h3 class="heading-6">{{ t.resume.work2_title }}</h3>
+                <p>{{ t.resume.work2_body }}</p>
+              </div>
+              <p class="work-meta caption-4">{{ t.resume.work2_meta }}</p>
+            </a>
+            <a
+              class="work-card small reveal"
+              href="https://github.com/hilerchyn/WritingWebApplications"
+              rel="noopener noreferrer"
+            >
+              <div>
+                <h3 class="heading-6">{{ t.resume.work3_title }}</h3>
+                <p>{{ t.resume.work3_body }}</p>
+              </div>
+              <p class="work-meta caption-4">{{ t.resume.work3_meta }}</p>
+            </a>
+            <a
+              class="work-card small reveal"
+              href="https://packagist.org/packages/hiler_laravel-admin-ext/user-management"
+              rel="noopener noreferrer"
+            >
+              <div>
+                <h3 class="heading-6">{{ t.resume.work4_title }}</h3>
+                <p>{{ t.resume.work4_body }}</p>
+              </div>
+              <p class="work-meta caption-4">{{ t.resume.work4_meta }}</p>
+            </a>
+            <a
+              class="work-card small reveal"
+              href="https://github.com/hilerchyn/iris-gitbook"
+              rel="noopener noreferrer"
+            >
+              <div>
+                <h3 class="heading-6">{{ t.resume.work5_title }}</h3>
+                <p>{{ t.resume.work5_body }}</p>
+              </div>
+              <p class="work-meta caption-4">{{ t.resume.work5_meta }}</p>
+            </a>
+            <a class="work-card small reveal" href="{{ t.home_href }}">
+              <div>
+                <h3 class="heading-6">{{ t.resume.work6_title }}</h3>
+                <p>{{ t.resume.work6_body }}</p>
+              </div>
+              <p class="work-meta caption-4">{{ t.resume.work6_meta }}</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section resume-skills" aria-labelledby="skills-title">
+        <div class="wrap">
+          <p class="section-kicker caption-3">{{ t.resume.skills_kicker }}</p>
+          <h2 class="heading-2" id="skills-title">{{ t.resume.skills_title }}</h2>
+          <div class="skill-groups">
+            <div class="skill-group reveal">
+              <h3 class="title-3">{{ t.resume.skill_mgmt_label }}</h3>
+              <ul class="chip-row">
+                <li>{{ t.resume.skill_mgmt_1 }}</li>
+                <li>{{ t.resume.skill_mgmt_2 }}</li>
+                <li>{{ t.resume.skill_mgmt_3 }}</li>
+                <li>{{ t.resume.skill_mgmt_4 }}</li>
+              </ul>
+            </div>
+            <div class="skill-group reveal">
+              <h3 class="title-3">{{ t.resume.skill_tech_label }}</h3>
+              <ul class="chip-row">
+                <li>{{ t.resume.skill_tech_1 }}</li>
+                <li>{{ t.resume.skill_tech_2 }}</li>
+                <li>{{ t.resume.skill_tech_3 }}</li>
+                <li>{{ t.resume.skill_tech_4 }}</li>
+                <li>{{ t.resume.skill_tech_5 }}</li>
+                <li>{{ t.resume.skill_tech_6 }}</li>
+                <li>{{ t.resume.skill_tech_7 }}</li>
+                <li>{{ t.resume.skill_tech_8 }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="final-cta">
+        <div class="wrap">
+          <div class="final-frame reveal">
+            <h2 class="heading-3">{{ t.resume.final_title }}</h2>
+            <p class="body-3 hero-sub">{{ t.resume.final_sub }}</p>
+            <div class="hero-actions">
+              <a
+                class="btn btn-ink button-md"
+                href="https://github.com/hilerchyn"
+                rel="noopener noreferrer"
+              >
+                {{ t.cta_github }}
+                <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"
+                  />
+                </svg>
+              </a>
+              <a class="btn btn-ghost button-md" href="{{ t.home_href }}">{{ t.resume.contact_home }}</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-row">
+        <p class="caption-4">{{ t.footer_line }}</p>
+        <div class="footer-links">
+          <a class="caption-4" href="{{ t.home_href }}">{{ t.nav_home }}</a>
+          <a
+            class="caption-4"
+            href="https://github.com/hilerchyn"
+            rel="noopener noreferrer"
+            >GitHub</a
+          >
+          <a class="caption-4" href="{{ t.switch_href }}" hreflang="{{ t.switch_hreflang }}" lang="{{ t.switch_hreflang }}">{{ t.switch_label }}</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/static/js/sketch.js"></script>
+  </body>
+</html>
