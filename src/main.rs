@@ -302,6 +302,8 @@ mod tests {
         assert!(html.contains("href=\"/en\""));
         assert!(html.contains("/static/css/sketch.css"));
         assert!(html.contains("/static/img/hero-desk.jpg"));
+        assert!(html.contains("tao@chentao.me"));
+        assert!(html.contains("tel:+8615954803856"));
     }
 
     #[tokio::test]
@@ -340,6 +342,11 @@ mod tests {
         assert!(html.contains("href=\"/en/about\""));
         assert!(html.contains("/static/css/sketch.css"));
         assert!(html.contains("/static/img/resume-desk.jpg"));
+        assert!(html.contains("/static/img/avatar.jpg"));
+        assert!(html.contains("tao@chentao.me"));
+        assert!(html.contains("mailto:tao@chentao.me"));
+        assert!(html.contains("tel:+8615954803856"));
+        assert!(html.contains("+86 159 5480 3856"));
     }
 
     #[tokio::test]
@@ -472,6 +479,7 @@ mod tests {
             "/static/js/sketch.js",
             "/static/img/hero-desk.jpg",
             "/static/img/resume-desk.jpg",
+            "/static/img/avatar.jpg",
             "/static/img/favicon.svg",
         ] {
             let response = app()

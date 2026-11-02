@@ -1088,8 +1088,39 @@ button {
   align-items: center;
 }
 
+.resume-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-400);
+  margin-bottom: var(--space-300);
+}
+
+.resume-avatar {
+  margin: 0;
+  flex-shrink: 0;
+  width: 120px;
+  border: var(--stroke) solid var(--ink);
+  background: var(--paper-2);
+}
+
+.resume-avatar img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center 18%;
+  display: block;
+}
+
+.resume-head-copy .eyebrow {
+  margin-bottom: var(--space-200);
+}
+
+.resume-head-copy .hero-title {
+  margin-bottom: var(--space-100);
+}
+
 .resume-role {
-  margin: 0 0 var(--space-300);
+  margin: 0;
   color: var(--ink-soft);
 }
 
@@ -1098,9 +1129,39 @@ button {
   flex-wrap: wrap;
   gap: var(--space-75) var(--space-300);
   list-style: none;
-  margin: 0 0 var(--space-400);
+  margin: 0 0 var(--space-300);
   padding: 0;
   color: var(--ink-faint);
+}
+
+.resume-contact {
+  list-style: none;
+  margin: 0 0 var(--space-400);
+  padding: 0;
+  display: grid;
+  gap: var(--space-75);
+}
+
+.resume-contact li {
+  display: grid;
+  grid-template-columns: 4.5em minmax(0, 1fr);
+  gap: var(--space-200);
+  align-items: baseline;
+}
+
+.resume-contact .caption-3 {
+  color: var(--accent);
+}
+
+.resume-contact a {
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.resume-contact a:hover {
+  text-decoration: underline;
 }
 
 .resume-visual img {
@@ -1423,6 +1484,14 @@ button {
   .blog-hero,
   .blog-post {
     padding-top: 112px;
+  }
+
+  .resume-head {
+    gap: var(--space-300);
+  }
+
+  .resume-avatar {
+    width: 96px;
   }
 
   .final-frame {

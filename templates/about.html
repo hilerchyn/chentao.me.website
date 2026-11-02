@@ -33,13 +33,35 @@
       <section class="resume-hero">
         <div class="wrap resume-hero-grid">
           <div class="resume-identity">
-            <p class="eyebrow caption-3">{{ t.resume.eyebrow }}</p>
-            <h1 class="heading-1 hero-title">{{ t.resume.name }}</h1>
-            <p class="title-2 resume-role">{{ t.resume.role }}</p>
+            <div class="resume-head">
+              <figure class="resume-avatar">
+                <img
+                  src="/static/img/avatar.jpg"
+                  width="460"
+                  height="460"
+                  alt="{{ t.resume.name }}"
+                />
+              </figure>
+              <div class="resume-head-copy">
+                <p class="eyebrow caption-3">{{ t.resume.eyebrow }}</p>
+                <h1 class="heading-1 hero-title">{{ t.resume.name }}</h1>
+                <p class="title-2 resume-role">{{ t.resume.role }}</p>
+              </div>
+            </div>
             <p class="body-3 hero-sub">{{ t.resume.lead }}</p>
             <ul class="resume-meta">
               <li class="caption-4">{{ t.resume.handle }}</li>
               <li class="caption-4">{{ t.resume.location }}</li>
+            </ul>
+            <ul class="resume-contact">
+              <li>
+                <span class="caption-3">{{ t.label_email }}</span>
+                <a class="title-4" href="mailto:{{ t.email }}">{{ t.email }}</a>
+              </li>
+              <li>
+                <span class="caption-3">{{ t.label_phone }}</span>
+                <a class="title-4" href="tel:{{ t.phone }}">{{ t.phone_display }}</a>
+              </li>
             </ul>
             <div class="hero-actions">
               <a

@@ -288,6 +288,10 @@
                 </svg>
               </summary>
               <p class="faq-a body-3">
+                <a href="mailto:{{ t.email }}">{{ t.email }}</a>
+                <span aria-hidden="true"> · </span>
+                <a href="tel:{{ t.phone }}">{{ t.phone_display }}</a>
+                <span aria-hidden="true"> · </span>
                 {{ t.faq4_a_before }}
                 <a href="https://github.com/hilerchyn" rel="noopener noreferrer">GitHub @hilerchyn</a>
                 {{ t.faq4_a_after }}
