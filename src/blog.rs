@@ -1,6 +1,6 @@
 use std::sync::OnceLock;
 
-use pulldown_cmark::{html, Options, Parser};
+use pulldown_cmark::{html, CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 use rust_embed::RustEmbed;
 use serde::Deserialize;
 
@@ -63,16 +63,71 @@ impl Post {
     }
 
     pub fn html(&self) -> String {
-        let mut options = Options::empty();
-        options.insert(Options::ENABLE_TABLES);
-        options.insert(Options::ENABLE_FOOTNOTES);
-        options.insert(Options::ENABLE_STRIKETHROUGH);
-        options.insert(Options::ENABLE_TASKLISTS);
-        let parser = Parser::new_ext(&self.markdown, options);
-        let mut out = String::new();
-        html::push_html(&mut out, parser);
-        out
+        render_markdown(&self.markdown)
     }
+}
+
+fn render_markdown(markdown: &str) -> String {
+    let mut options = Options::empty();
+    options.insert(Options::ENABLE_TABLES);
+    options.insert(Options::ENABLE_FOOTNOTES);
+    options.insert(Options::ENABLE_STRIKETHROUGH);
+    options.insert(Options::ENABLE_TASKLISTS);
+    let parser = Parser::new_ext(markdown, options);
+    let mut events = Vec::new();
+    let mut mermaid_src = String::new();
+    let mut in_mermaid = false;
+
+    for event in parser {
+        if in_mermaid {
+            match event {
+                Event::Text(text) => mermaid_src.push_str(&text),
+                Event::End(TagEnd::CodeBlock) => {
+                    in_mermaid = false;
+                    events.push(Event::Html(mermaid_html(&mermaid_src).into()));
+                    mermaid_src.clear();
+                }
+                _ => {}
+            }
+            continue;
+        }
+        match event {
+            Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) if is_mermaid(&lang) => {
+                in_mermaid = true;
+            }
+            other => events.push(other),
+        }
+    }
+
+    let mut out = String::new();
+    html::push_html(&mut out, events.into_iter());
+    out
+}
+
+fn is_mermaid(lang: &str) -> bool {
+    lang.split_whitespace()
+        .next()
+        .is_some_and(|token| token.eq_ignore_ascii_case("mermaid"))
+}
+
+fn mermaid_html(source: &str) -> String {
+    format!(
+        "<div class=\"mermaid\">{}</div>\n",
+        escape_html(source.trim_matches(['\n', '\r']))
+    )
+}
+
+fn escape_html(source: &str) -> String {
+    let mut out = String::with_capacity(source.len());
+    for ch in source.chars() {
+        match ch {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            _ => out.push(ch),
+        }
+    }
+    out
 }
 
 #[derive(Debug, Clone)]
@@ -331,7 +386,9 @@ pub(crate) fn parse_article(raw: &str) -> Option<(Meta, &str)> {
     let rest = raw.strip_prefix("+++")?.trim_start_matches(['\n', '\r']);
     let fence = rest.find("\n+++")?;
     let toml_src = rest[..fence].trim();
-    let body = rest[fence + 4..].trim_start_matches(['+', '\n', '\r']).trim();
+    let body = rest[fence + 4..]
+        .trim_start_matches(['+', '\n', '\r'])
+        .trim();
     let meta: Meta = toml::from_str(toml_src).ok()?;
     if meta.title.is_empty() || meta.date.is_empty() {
         return None;
@@ -356,8 +413,7 @@ mod tests {
 
     #[test]
     fn parse_path_reads_kind_slug_lang() {
-        let (kind, slug, lang) =
-            parse_path("architecture/lay-the-path.zh.md").expect("path");
+        let (kind, slug, lang) = parse_path("architecture/lay-the-path.zh.md").expect("path");
         assert_eq!(kind, "architecture");
         assert_eq!(slug, "lay-the-path");
         assert_eq!(lang, Lang::Zh);
@@ -371,6 +427,29 @@ mod tests {
         assert_eq!(meta.date, "2026-11-03");
         assert_eq!(meta.summary, "S");
         assert_eq!(body, "Body.");
+    }
+
+    #[test]
+    fn mermaid_fence_becomes_a_diagram_block() {
+        let html = render_markdown("See.\n\n```mermaid\nflowchart LR\n  A-->B\n```\n\nDone.\n");
+        assert!(html.contains("<p>See.</p>"));
+        assert!(html.contains("<div class=\"mermaid\">flowchart LR\n  A--&gt;B</div>"));
+        assert!(!html.contains("language-mermaid"));
+        assert!(html.contains("<p>Done.</p>"));
+    }
+
+    #[test]
+    fn mermaid_fence_escapes_html() {
+        let html = render_markdown("```Mermaid\nA-->B\nC[<script>]\n```\n");
+        assert!(html.contains("&lt;script&gt;"));
+        assert!(!html.contains("<script>"));
+    }
+
+    #[test]
+    fn other_fences_stay_code_blocks() {
+        let html = render_markdown("```rust\nfn main() {}\n```\n");
+        assert!(html.contains("language-rust"));
+        assert!(!html.contains("class=\"mermaid\""));
     }
 
     #[test]

@@ -1436,6 +1436,37 @@ button {
   color: var(--ink-soft);
 }
 
+.prose .mermaid:not([data-rendered]) {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  white-space: pre;
+  overflow-x: auto;
+  padding: var(--space-300);
+  border: var(--stroke) solid var(--ink);
+  background: var(--paper-2);
+}
+
+.prose .mermaid[data-rendered] {
+  overflow-x: auto;
+  padding: var(--space-200) 0;
+}
+
+.prose .mermaid[data-rendered] svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+}
+
+.prose .mermaid.mermaid-error {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  white-space: pre-wrap;
+  padding: var(--space-300);
+  border: var(--stroke) solid var(--ink);
+  background: var(--paper-2);
+}
+
 @media print {
   .site-nav,
   .mobile-panel,

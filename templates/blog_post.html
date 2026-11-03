@@ -46,5 +46,8 @@
 
     {% include "footer.html" %}
     <script src="/static/js/sketch.js"></script>
+    {% if mermaid %}
+    <script type="module" src="/static/js/mermaid-init.js"></script>
+    {% endif %}
   </body>
 </html>

@@ -5,7 +5,7 @@ use askama::Template;
 use axum::{
     extract,
     extract::Path,
-    http::{header, StatusCode, Uri},
+    http::{header, HeaderMap, StatusCode, Uri},
     response::{Html, IntoResponse, Response},
     routing::get,
     Router,
@@ -43,7 +43,7 @@ async fn main() {
 }
 
 // 3. Fallback/catch-all handler for embedded assets
-async fn static_handler(uri: Uri) -> impl IntoResponse {
+async fn static_handler(headers: HeaderMap, uri: Uri) -> Response {
     let mut path = uri.path().trim_start_matches('/').to_string();
 
     // Strip the route prefix if necessary (e.g., "/static/style.css" -> "style.css")
@@ -51,13 +51,40 @@ async fn static_handler(uri: Uri) -> impl IntoResponse {
         path = path.replacen("static/", "", 1);
     }
 
+    let gz_path = format!("{path}.gz");
+    let has_gzip = Asset::get(&gz_path).is_some();
+    let accept_gzip = headers
+        .get(header::ACCEPT_ENCODING)
+        .and_then(|value| value.to_str().ok())
+        .is_some_and(|value| {
+            value.split(',').any(|part| {
+                part.split(';')
+                    .next()
+                    .unwrap_or("")
+                    .trim()
+                    .eq_ignore_ascii_case("gzip")
+            })
+        });
+
+    if accept_gzip && has_gzip {
+        let content = Asset::get(&gz_path).unwrap();
+        let mime = mime_guess::from_path(&path).first_or_octet_stream();
+        return Response::builder()
+            .header(header::CONTENT_TYPE, mime.as_ref())
+            .header(header::CONTENT_ENCODING, "gzip")
+            .header(header::VARY, "Accept-Encoding")
+            .body(axum::body::Body::from(content.data))
+            .unwrap();
+    }
+
     match Asset::get(&path) {
         Some(content) => {
             let mime = mime_guess::from_path(&path).first_or_octet_stream();
-            Response::builder()
-                .header(header::CONTENT_TYPE, mime.as_ref())
-                .body(axum::body::Body::from(content.data))
-                .unwrap()
+            let mut builder = Response::builder().header(header::CONTENT_TYPE, mime.as_ref());
+            if has_gzip {
+                builder = builder.header(header::VARY, "Accept-Encoding");
+            }
+            builder.body(axum::body::Body::from(content.data)).unwrap()
         }
         None => StatusCode::NOT_FOUND.into_response(),
     }
@@ -167,6 +194,8 @@ fn handler_blog_post(lang: Lang, kind: String, slug: String) -> Response {
     } else {
         kind_href(lang.other(), &kind)
     };
+    let body = post.html();
+    let mermaid = body.contains("class=\"mermaid\"");
     HtmlTemplate(BlogPostTemplate {
         nav_name: "blog",
         switch_href,
@@ -179,7 +208,8 @@ fn handler_blog_post(lang: Lang, kind: String, slug: String) -> Response {
             .map(|k| k.name(lang).to_string())
             .unwrap_or_else(|| kind.clone()),
         kind_href: kind_href(lang, &kind),
-        body: post.html(),
+        body,
+        mermaid,
         t,
     })
     .into_response()
@@ -240,6 +270,7 @@ struct BlogPostTemplate {
     kind_name: String,
     kind_href: String,
     body: String,
+    mermaid: bool,
     t: T,
 }
 
@@ -464,9 +495,37 @@ mod tests {
         .unwrap();
         assert!(post_html.contains("先把边界画出来"));
         assert!(post_html.contains("href=\"/en/blog/architecture/lay-the-path\""));
+        assert!(post_html.contains("<div class=\"mermaid\">"));
+        assert!(post_html.contains("flowchart TD"));
+        assert!(post_html.contains("/static/js/mermaid-init.js"));
+
+        let plain = app()
+            .oneshot(
+                Request::get("/blog/ai/tool-in-hand")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(plain.status(), StatusCode::OK);
+        let plain_html = String::from_utf8(
+            plain
+                .into_body()
+                .collect()
+                .await
+                .unwrap()
+                .to_bytes()
+                .to_vec(),
+        )
+        .unwrap();
+        assert!(!plain_html.contains("mermaid-init.js"));
 
         let missing = app()
-            .oneshot(Request::get("/blog/no-such-type").body(Body::empty()).unwrap())
+            .oneshot(
+                Request::get("/blog/no-such-type")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
             .await
             .unwrap();
         assert_eq!(missing.status(), StatusCode::NOT_FOUND);
@@ -488,5 +547,39 @@ mod tests {
                 .unwrap();
             assert_eq!(response.status(), StatusCode::OK, "missing {path}");
         }
+    }
+
+    #[tokio::test]
+    async fn mermaid_bundle_can_be_gzipped() {
+        let gzipped = app()
+            .oneshot(
+                Request::get("/static/js/mermaid-11.16.0.mjs")
+                    .header(header::ACCEPT_ENCODING, "gzip")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(gzipped.status(), StatusCode::OK);
+        assert_eq!(
+            gzipped.headers().get(header::CONTENT_ENCODING).unwrap(),
+            "gzip"
+        );
+        let bytes = gzipped.into_body().collect().await.unwrap().to_bytes();
+        assert!(bytes.starts_with(&[0x1f, 0x8b]));
+
+        let raw = app()
+            .oneshot(
+                Request::get("/static/js/mermaid-11.16.0.mjs")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(raw.status(), StatusCode::OK);
+        assert!(raw.headers().get(header::CONTENT_ENCODING).is_none());
+        let text = String::from_utf8(raw.into_body().collect().await.unwrap().to_bytes().to_vec())
+            .unwrap();
+        assert!(text.starts_with("var "));
     }
 }
